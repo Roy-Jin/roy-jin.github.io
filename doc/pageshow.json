@@ -36,15 +36,15 @@
     "projects": [
         {
             "name": "RuoYiBoard",
-            "href": "https://ryboard.pages.dev"
+            "href": "https://rj-web.pages.dev/ryboard"
         },
         {
             "name": "JSTERM",
-            "href": "https://jsterm.pages.dev"
+            "href": "https://rj-web.pages.dev/jsterm"
         },
         {
             "name": "2048",
-            "href": "https://2048-rj.pages.dev"
+            "href": "https://rj-web.pages.dev/2048"
         }
     ],
     "copyright": "Copyright © 2024 - 2025 Roy-Jin",
