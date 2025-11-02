@@ -17,8 +17,8 @@ let rangeDom = document.querySelector('#slider');
 let playPause = document.querySelector('#playPause');
 let skipForwardButton = document.querySelector('#skipForward');
 let skipBackButton = document.querySelector('#skipBack');
-let modes = document.querySelector('#modes');
-let list = document.querySelector('#list');
+// let modes = document.querySelector('#modes');
+// let list = document.querySelector('#list');
 
 const colorThief = new ColorThief();
 const _image = new Image();
@@ -146,8 +146,8 @@ rangeDom.addEventListener('input', (event) => {
 playPause.addEventListener('click', () => { ap.template.button.click() });
 skipForwardButton.addEventListener('click', () => { ap.skipForward(); ap.play() });
 skipBackButton.addEventListener('click', () => { ap.skipBack(); ap.play() });
-modes.addEventListener('click', () => { mui.toast("此功能正在开发中...") })
-list.addEventListener('click', () => { mui.toast("此功能正在开发中...") })
+// modes.addEventListener('click', () => { mui.toast("此功能正在开发中...") })
+// list.addEventListener('click', () => { mui.toast("此功能正在开发中...") })
 
 
 function musicUpdate() {
