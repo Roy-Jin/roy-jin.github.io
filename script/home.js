@@ -16,11 +16,6 @@ pageshow.ref(
                 innerHTML: site_data.name,
             }
         }, {
-            selector: "#avatar",
-            attr: {
-                src: site_data.avatar[0],
-            }
-        }, {
             selector: "#social",
             attr: {
                 innerHTML: (() => site_data.social.map(link => `<a href="${link.href}" class="link" target="_blank" style="background:color-mix(in srgb, ${link.color} 20%, transparent)"><i class="fa-2x ${link.icon}" style="color:${link.color ?? ''}"></i></a>`).join(''))()
@@ -38,6 +33,8 @@ pageshow.ref(
         }
     ]
 );
+
+document.getElementById("avatarImage").setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", site_data.avatar[0]);
 
 (async () => {
     // 更新日期&时间

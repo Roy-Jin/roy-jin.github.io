@@ -2,7 +2,7 @@
 @import url("//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");
 
 * {
-    transition: var(--transition);
+    transition: color var(--transition), background-color var(--transition);
 }
 
 .mui-scroll {
@@ -27,11 +27,13 @@
 .body>.ForMe {
     gap: 1rem;
     display: flex;
+    max-width: 500px;
     align-items: center;
     flex-direction: column;
 }
 
 .ForMe>.base {
+    width: 100%;
     padding: 1rem;
     display: flex;
     align-items: center;
@@ -42,9 +44,7 @@
 
 .ForMe #avatar {
     max-width: 66%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    border-radius: 50%;
+    max-height: 266px;
 }
 
 .ForMe #name {
@@ -83,10 +83,9 @@
 }
 
 .ForMe>.quote {
-    width: 95%;
+    width: 90%;
     padding: .5rem;
     display: flex;
-    max-width: 500px;
     border-radius: 10px;
     flex-direction: row;
     font-family: "仓耳逍遥行书";
@@ -199,6 +198,7 @@
         gap: 0;
         margin-top: 1rem;
         height: 100%;
+        width: 80%;
     }
 
     #social {
