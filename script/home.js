@@ -2,6 +2,7 @@ import theme from '/module/theme.js';
 import pageshow from '/module/pageshow.js';
 theme.init();
 let site_data = (await pageshow.init()).data;
+let repos = await fetch(site_data.github_repos.api.replace('{name}', site_data.github_repos.name)).then(response => response.json()).then(data => data.sort((a, b) => b.stargazers_count - a.stargazers_count).splice(0, site_data.github_repos.show_count));
 pageshow.ref(
     [
         {
@@ -32,7 +33,7 @@ pageshow.ref(
         }, {
             selector: "#projects",
             attr: {
-                innerHTML: (() => site_data.projects.map(project => `<a href="${project.href}" class="project" target="_blank" style="background:color-mix(in srgb, ${project.color ?? ''} 20%, transparent)"><div class="text">${project.name}</div></a>`).join(''))()
+                innerHTML: (() => repos.map(repo => `<a href="${repo.html_url}" class="project" target="_blank" style="background:color-mix(in srgb, ${repo.color ?? ''} 20%, transparent)"><div class="text">${repo.name}</div></a>`).join(''))()
             }
         }
     ]

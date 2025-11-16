@@ -33,20 +33,11 @@
             "href": "https://space.bilibili.com/3461572714302163"
         }
     ],
-    "projects": [
-        {
-            "name": "RuoYiBoard",
-            "href": "https://rj-web.pages.dev/ryboard"
-        },
-        {
-            "name": "JSTERM",
-            "href": "https://rj-web.pages.dev/jsterm"
-        },
-        {
-            "name": "2048",
-            "href": "https://rj-web.pages.dev/2048"
-        }
-    ],
+    "github_repos": {
+        "name": "Roy-Jin",
+        "show_count": 4,
+        "api": "https://api.github.com/users/{name}/repos?per_page=10"
+    },
     "copyright": "Copyright © 2024 - 2025 Roy-Jin",
     "music": {
         "api": "https://api.injahow.cn/meting/",
