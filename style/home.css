@@ -2,7 +2,7 @@
 @import url("//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css");
 
 * {
-    transition: color var(--transition), background-color var(--transition);
+    transition: color var(--transition), background-color var(--transition), transform var(--transition);
 }
 
 .mui-scroll {
@@ -198,7 +198,6 @@
         gap: 0;
         margin-top: 1rem;
         height: 100%;
-        width: 80%;
     }
 
     #social {
