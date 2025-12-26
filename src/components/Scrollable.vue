@@ -23,11 +23,16 @@ const wrapperRef = ref<HTMLDivElement | null>(null)
 let bsInstance: BScroll | null = null
 
 const defaultOptions: Options = {
-    scrollY: true,
+    scrollY: true,       // 允许纵向滚动
     bounce: true,        // 回弹效果
     momentum: true,      // 惯性滚动
     observeDOM: true,    // 自动监听 DOM 变化
-    observeImage: true,
+    observeImage: true,  // 自动监听图片加载
+    click: true,         // 允许点击事件
+    autoBlur: true,      // 自动失焦
+    disableTouch: false, // 不禁止 touch 事件
+    disableMouse: false, // 不禁止 mouse 事件
+    mouseWheel: true,    // 允许滚轮事件
     ...props.options
 }
 
