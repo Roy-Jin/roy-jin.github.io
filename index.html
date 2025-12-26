@@ -2,52 +2,95 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Access-Control-Allow-Origin" content="*">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Roy-Jin | MyIndex</title>
-
-    <link rel="icon" href="https://rj-cloud.pages.dev/ForMe/avatar-nobg.png" type="image/png">
-    <link rel="shortcut icon" href="https://rj-cloud.pages.dev/ForMe/avatar.ico" type="image/x-icon">
-
-    <meta name="author" content="Roy-Jin">
-    <meta name="keywords" content="Roy-Jin, Roy, Jin, 个人主页, 个人网站, MyIndex">
-    <meta name="description"
-        content="咖啡很苦，生活很甜！嘿～欢迎来到我的个人主页✨！这里是 Roy-Jin，一个用代码“烹饪”生活的小极客 ～(๑・̀ㅂ・́)و✧🎉">
-    <meta property="og:title" content="Roy-Jin | MyIndex">
-    <meta property="og:description"
-        content="咖啡很苦，生活很甜！嘿～欢迎来到我的个人主页✨！这里是 Roy-Jin，一个用代码“烹饪”生活的小极客 ～(๑・̀ㅂ・́)و✧🎉">
-    <meta property="og:image" content="https://rj-cloud.pages.dev/ForMe/avatar.png">
-    <meta property="og:url" content="https://r-j.pages.dev">
-    <link rel="canonical" href="https://r-j.pages.dev" />
-
-    <link rel="stylesheet" href="/style/index.css">
-    <script src="/module/mui.all.js"></script>
-    <script type="module" src="/script/index.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Roy-Jin | MyIndex</title>
+  <link rel="icon" href="https://rj-cloud.pages.dev/ForMe/avatar-nobg.png" type="image/png">
+  <link rel="shortcut icon" href="https://rj-cloud.pages.dev/ForMe/avatar.ico" type="image/x-icon">
+  <meta name="author" content="Roy-Jin">
+  <meta name="keywords" content="Roy-Jin, Roy, Jin, 个人主页, 个人网站, MyIndex">
+  <meta name="description" content="咖啡很苦，生活很甜！嘿～欢迎来到我的个人主页✨！这里是 Roy-Jin，一个用代码“烹饪”生活的小极客 ～(๑・̀ㅂ・́)و✧🎉">
+  <meta property="og:title" content="Roy-Jin | MyIndex">
+  <meta property="og:description" content="咖啡很苦，生活很甜！嘿～欢迎来到我的个人主页✨！这里是 Roy-Jin，一个用代码“烹饪”生活的小极客 ～(๑・̀ㅂ・́)و✧🎉">
+  <meta property="og:image" content="https://rj-cloud.pages.dev/ForMe/avatar.png">
+  <meta property="og:url" content="https://r-j.pages.dev">
+  <link rel="canonical" href="https://r-j.pages.dev" />
 </head>
 
 <body>
-    <div class="loading">
-        <img src="https://rj-cloud.pages.dev/ForMe/avatar-nobg.png" alt="Roy-Jin">
-        <div class="text">Roy-Jin|MyIndex</div>
-        <small>
-            <span class="fa-solid fa-circle-notch fa-3x fa-spin"></span>
-            <br><br><i>首次加载可能很慢，若长时间未加载成功，<br>请点击这里刷新该页面!</i>
-        </small>
-    </div>
+  <div id="loading">
+    <style>
+      #loading {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        transition: opacity 2s ease-in-out, filter 1s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: #26242e;
+        z-index: 99;
+      }
 
-    <div class="main">
-        <div class="header">
-            <div class="title">
-                <img src="https://rj-cloud.pages.dev/ForMe/avatar-nobg.png" alt="logo">
-                <h2>Roy-Jin|<span class="subtitle">MyIndex</span></h2>
-            </div>
-            <div id="menu-btn" class="fa-solid fa-bars"></div>
-        </div>
+      #loading * {
+        user-select: none;
+        color: aliceblue;
+        filter: drop-shadow(0px 0px 30px color-mix(in srgb, #45969c 60%, transparent));
+      }
 
-        <div id="toggle-menu"></div>
-        <div id="content-frames"></div>
-    </div>
+      #loading[data-hidden] {
+        animation: fade-out 1s ease-in-out forwards;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes fade-out {
+        100% {
+          visibility: hidden;
+          filter: blur(50px);
+          opacity: 0;
+        }
+      }
+
+      #loading>img {
+        -webkit-user-drag: none;
+        width: 12rem;
+        height: 12rem;
+        animation: jelly 1s 1;
+      }
+
+      @keyframes jelly {
+        0% {
+          opacity: 0;
+          transform: scale(0);
+        }
+
+        86% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      #loading>.text {
+        margin: 3rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(#45969c);
+      }
+    </style>
+    <img src="https://rj-cloud.pages.dev/ForMe/avatar-nobg.png" alt="Roy-Jin">
+    <div class="text">Roy-Jin | MyIndex</div>
+  </div>
+
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>

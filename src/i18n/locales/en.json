@@ -1,0 +1,36 @@
+{
+  "tips": {
+    "loading": "加载中...",
+    "openLink": {
+      "title": "Open this link?",
+      "message": "Are you sure you want to open this link?"
+    }
+  },
+  "subtitle": "Hi, welcome to my personal website!",
+  "quote": "Coffee is bitter, Life is sweet.",
+  "sayings": {
+    "error": "ERROR: Failed to load sayings.",
+    "from": {
+      "one_yan": "One Yan",
+      "funny": "Funny Sayings"
+    }
+  },
+  "music": {
+    "noLyric": "No lyrics available"
+  },
+  "theme": {
+    "light": "Light Theme",
+    "dark": "Dark Theme"
+  },
+  "lang": {
+    "name": "Lang",
+    "zh": "中文",
+    "en": "English"
+  },
+  "modal": {
+    "button": {
+      "confirm": "Okay",
+      "cancel": "Cancel"
+    }
+  }
+}

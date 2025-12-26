@@ -1,0 +1,36 @@
+{
+  "tips": {
+    "loading": "加载中...",
+    "openLink": {
+      "title": "打开链接？",
+      "message": "你确定要打开这个链接吗？"
+    }
+  },
+  "subtitle": "嗨，欢迎来到我的个人网站！",
+  "quote": "咖啡很苦，生活很甜！",
+  "sayings": {
+    "error": "错误：语录加载失败",
+    "from": {
+      "one_yan": "来自一言",
+      "funny": "憨憨语录"
+    }
+  },
+  "music": {
+    "noLyric": "暂无歌词"
+  },
+  "theme": {
+    "light": "浅色模式",
+    "dark": "深色模式"
+  },
+  "lang": {
+    "name": "语言",
+    "zh": "中文",
+    "en": "English"
+  },
+  "modal": {
+    "button": {
+      "confirm": "确认",
+      "cancel": "取消"
+    }
+  }
+}

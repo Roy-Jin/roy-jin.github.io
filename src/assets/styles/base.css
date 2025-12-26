@@ -1,0 +1,58 @@
+/* @import url("/style/mui.base.css"); */
+
+:root {
+    /* 主色调 */
+    --main-bg: #ffffff;
+    --panel-bg: #57b2aa;
+    --theme-color: #45969c;
+    --text-color: #444;
+    --primary-color: #4a90e2;
+
+    --theme-color-light: color-mix(in srgb, var(--theme-color) 20%, transparent);
+    --theme-color-dark: color-mix(in srgb, var(--theme-color) 60%, transparent);
+
+    /* 其它变量 */
+    --header-height: 48px;
+    --border-radius: 2rem;
+    --transition: 0.3s ease;
+}
+
+[data-theme="dark"] {
+    /* 主色调 */
+    --main-bg: #26242e;
+    --panel-bg: #5d6d6f;
+    --text-color: #e2e2e2;
+}
+
+@font-face {
+    font-family: "仓耳渔阳体";
+    src: url("../fonts/仓耳渔阳体W03.ttf");
+}
+
+@font-face {
+    font-family: "Playball";
+    src: url("../fonts/Playball-Regular.woff2");
+}
+
+@font-face {
+    font-family: "Electrolize";
+    src: url("../fonts/Electrolize-Regular.ttf");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    box-sizing: border-box;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,body {
+    width: 100dvw;
+    height: 100dvh;
+    overflow: hidden;
+    font-family: "Playball", "仓耳渔阳体";
+    color: var(--text-color);
+    background-color: var(--main-bg);
+}
