@@ -9,8 +9,8 @@ export const useEnv = defineStore("env", {
             "MyIndex",
         ],
         avatar: [
-            "https://rj-cloud.pages.dev/ForMe/avatar.png",
-            "https://rj-cloud.pages.dev/ForMe/avatar-nobg.png",
+            "/avatar.png",
+            "/avatar-nobg.png",
         ],
         social: [
             {
