@@ -21,8 +21,8 @@
                     <p id="quote-text">{{ $t("quote") }}</p>
                 </div>
                 <div id="social">
-                    <div v-for="link in socialLinks" :key="link.name" @click="openLink(link.href)" class="link"
-                        :style="link.style">
+                    <div v-for="link in socialLinks" :key="link.name" @click="openLink(link.href)"
+                        class="link cursor-target" :style="link.style">
                         <Icon :icon="link.icon" :fill="link.color" />
                     </div>
                 </div>
@@ -31,7 +31,16 @@
                 <div class="today">
                     <div id="date">
                         <p class="time">
-                            <span class="num">{{ moment.num }}</span>
+                            <span class="num" :style="{ width: '100%' }">
+                                <Counter :font-size="50" :font-weight="600" :value="moment.num[0] as number"
+                                    :mediaScreen="[{ maxWidth: 768, props: { fontSize: 40 } }]" />
+                                <span>:</span>
+                                <Counter :font-size="50" :font-weight="600" :value="moment.num[1] as number"
+                                    :mediaScreen="[{ maxWidth: 768, props: { fontSize: 40 } }]" />
+                                <span>:</span>
+                                <Counter :font-size="50" :font-weight="600" :value="moment.num[2] as number"
+                                    :mediaScreen="[{ maxWidth: 768, props: { fontSize: 40 } }]" />
+                            </span>
                             <span class="sub">{{ moment.sub }}</span>
                         </p>
                         <p class="day">{{ moment.day }}</p>
@@ -43,7 +52,7 @@
                     </div>
                 </div>
                 <div id="projects">
-                    <div v-for="repo in repos" @click="openLink(repo.html_url)" class="project"
+                    <div v-for="repo in repos" @click="openLink(repo.html_url)" class="project cursor-target"
                         :style="{ background: `color-mix(in srgb, ${repo.color ?? ''} 20%, transparent)` }">
                         <div class="text">{{ repo.name }}</div>
                     </div>
@@ -60,6 +69,7 @@ import dayjs from 'dayjs';
 import { useI18n } from "vue-i18n";
 import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
+import Counter from '@/components/Counter.vue';
 const Icon = defineAsyncComponent(() => import('@/components/Icon.vue'));
 import { showConfirmDialog } from 'vant';
 import 'vant/es/dialog/style';
@@ -139,7 +149,7 @@ const apis = [
 ];
 
 const moment = ref({
-    num: "00:00:00",
+    num: [0, 0, 0],
     sub: "AM",
     day: "Monday, 1 January."
 })
@@ -153,8 +163,11 @@ const repos = ref(global.repos);
 
 let updateMoment: any = () => updateMoment = setInterval(() => {
     const now = dayjs();
+    const hh = Number(now.format("hh"));
+    const mm = Number(now.format("mm"));
+    const ss = Number(now.format("ss"));
     moment.value = {
-        num: now.format("hh:mm:ss"),
+        num: [hh, mm, ss],
         sub: now.format("A"),
         day: now.format("dddd, D MMMM.")
     }
@@ -190,6 +203,7 @@ const getSayings = async () => {
 };
 
 const getRepos = async () => {
+    if ((Date.now() - global.repos_upd) < (60 * 60 * 1000)) return;
     const url = env.github_repos.api.replace('%name%', env.github_repos.name)
     const rep =
         await fetch(url)
@@ -330,13 +344,16 @@ onUnmounted(() => {
     font-family: "Playball";
 }
 
-#date>.time {
-    font-size: 50px;
-    font-weight: 600;
-}
-
 .time>.num {
     font-family: sans-serif;
+
+    &>span {
+        font-size: 3rem;
+        font-weight: 600;
+        display: inline-block;
+        padding-right: 0.3rem;
+        transform: translateY(-.5rem);
+    }
 }
 
 .time>.sub {
@@ -412,8 +429,9 @@ onUnmounted(() => {
         margin-bottom: 1rem;
     }
 
-    #date>.time {
-        font-size: 40px;
+    .time>.num>span {
+        font-size: 2rem;
+        transform: translateY(-.4rem);
     }
 }
 </style>

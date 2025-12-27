@@ -10,6 +10,7 @@ export const useGlobal = defineStore("global", {
       from: "" as string,
     },
     repos: [] as any[],
+    repos_upd: 0 as number,
     music: {
       dataUpd: 0 as number,
       data: [] as {

@@ -327,7 +327,7 @@ watch(() => global.music.url, (newUrl, oldUrl) => {
 onMounted(async () => {
     try {
         const diffTime = (Date.now() - global.music.dataUpd);
-        if (diffTime > 2 * 60 * 60 * 1000) {
+        if (diffTime > (60 * 60 * 1000)) {
             const apis = musicConfig.apis;
             for (let i = 0; i < apis.length; i++) {
                 const api = apis[i] as string;

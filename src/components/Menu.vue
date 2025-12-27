@@ -8,12 +8,11 @@
         <Scrollable class="content-wrapper">
             <div class="content">
                 <div class="title">
-                    <span>{{ useEnv().title[0] }}</span>
                     <span>{{ useEnv().title[1] }}</span>
                 </div>
-                <MusicPlayer />
+                <MusicPlayer class="cursor-target"/>
                 <hr>
-                <div class="switcher" @click="toggleTheme">
+                <div class="switcher cursor-target" @click="toggleTheme">
                     <div class="icon">
                         <Sun v-if="global.theme === 'light'" />
                         <Moon v-else />
@@ -22,7 +21,7 @@
                         {{ global.theme === 'light' ? $t("theme.light") : $t("theme.dark") }}
                     </div>
                 </div>
-                <div class="switcher" @click="toggleLang">
+                <div class="switcher cursor-target" @click="toggleLang">
                     <div class="icon">
                         <Languages />
                     </div>

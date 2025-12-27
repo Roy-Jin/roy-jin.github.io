@@ -3,13 +3,14 @@
   <div class="views" :style="{ paddingTop: headerHeight + 'px' }">
     <router-view />
   </div>
+  <TargetCursor :spin-duration="4" />
   <van-config-provider :theme="global.theme" />
 </template>
 
 <script setup lang="ts">
 import { ref, provide, onMounted, computed, defineAsyncComponent } from 'vue'
 import { useGlobal } from './stores/global'
-
+const TargetCursor = defineAsyncComponent(() => import('@/components/Cursor.vue'));
 const Header = defineAsyncComponent(() => import('@/components/Header.vue'))
 
 const headerRef = ref<InstanceType<typeof Header> | null>(null)
@@ -38,6 +39,7 @@ onMounted(() => {
 
 <style>
 @import '@styles/base.css';
+@import "tailwindcss";
 
 #app {
   width: 100%;

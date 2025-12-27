@@ -18,8 +18,10 @@
     "@vant/touch-emulator": "^1.4.0",
     "colorthief": "^2.6.0",
     "dayjs": "^1.11.19",
+    "gsap": "^3.14.2",
     "lrc-kit": "^1.1.1",
     "lucide-vue-next": "^0.562.0",
+    "motion-v": "^1.7.4",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "vant": "^4.9.22",
@@ -28,6 +30,7 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
     "@tsconfig/node24": "^24.0.3",
     "@types/colorthief": "^2.6.0",
     "@types/node": "^24.10.1",
