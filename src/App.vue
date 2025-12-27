@@ -7,11 +7,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, provide, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import Header from './components/Header.vue'
+import { ref, provide, onMounted, computed, defineAsyncComponent } from 'vue'
 import { useGlobal } from './stores/global'
-import Modal from './components/Modal.vue'
+
+const Header = defineAsyncComponent(() => import('@/components/Header.vue'))
+const Modal = defineAsyncComponent(() => import('@/components/Modal.vue'))
 
 const headerRef = ref<InstanceType<typeof Header> | null>(null)
 const global = useGlobal()
@@ -34,20 +34,12 @@ provide('header', {
 })
 
 onMounted(() => {
-  document.getElementById("loading")?.setAttribute("data-hidden", "TRUE");
+  window.addEventListener('load', () => {
+    document.getElementById("loading")?.setAttribute("data-hidden", "TRUE");
+  })
   document.oncontextmenu = () => false;
   document.documentElement.setAttribute('data-theme', global.theme);
   useGlobal().initLang();
-
-  // router.afterEach(() => {
-  //   const appElement = document.getElementById('app');
-  //   if (appElement) {
-  //     appElement.scrollIntoView({
-  //       block: 'start',
-  //       behavior: 'smooth'
-  //     })
-  //   }
-  // })
 })
 
 
@@ -55,7 +47,6 @@ onMounted(() => {
 
 <style>
 @import '@styles/base.css';
-@import '@styles/font-awesome.css';
 
 #app {
   width: 100%;

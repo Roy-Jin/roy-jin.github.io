@@ -1,53 +1,54 @@
 <template>
     <div v-if="isOpen" class="menu-overlay" @click.self="closeMenu">
     </div>
-        <div class="menu" :class="{ 'open': isOpen }" :style="{
-            top: `${top}px`,
-            height: `calc(100% - ${top}px)`
-        }">
-            <Scrollable class="content-wrapper">
-                <div class="content">
-                    <div class="title">
-                        <span>{{ useEnv().title[0] }}</span>/
-                        <span>{{ useEnv().title[1] }}</span>
-                    </div>
-                    <MusicPlayer />
-                    <hr>
-                    <div class="switcher" @click="toggleTheme">
-                        <div class="icon">
-                            <i
-                                :class="{ 'fa-solid fa-moon': global.theme === 'dark', 'fa-solid fa-sun-bright': global.theme === 'light' }"></i>
-                        </div>
-                        <div>
-                            {{ global.theme === 'light' ? $t("theme.light") : $t("theme.dark") }}
-                        </div>
-                    </div>
-                    <div class="switcher" @click="toggleLang">
-                        <div class="icon">
-                            <i class="fa-solid fa-earth-africa"></i>
-                        </div>
-                        <div>
-                            {{ $t("lang.name") + "：" + $t(`lang.${global.lang}`) }}
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="footer">{{ useEnv().copyright }}</div>
+    <div class="menu" :class="{ 'open': isOpen }" :style="{
+        top: `${top}px`,
+        height: `calc(100% - ${top}px)`
+    }">
+        <Scrollable class="content-wrapper">
+            <div class="content">
+                <div class="title">
+                    <span>{{ useEnv().title[0] }}</span>/
+                    <span>{{ useEnv().title[1] }}</span>
                 </div>
-            </Scrollable>
-        </div>
+                <MusicPlayer />
+                <hr>
+                <div class="switcher" @click="toggleTheme">
+                    <div class="icon">
+                        <Sun v-if="global.theme === 'light'" />
+                        <Moon v-else />
+                    </div>
+                    <div>
+                        {{ global.theme === 'light' ? $t("theme.light") : $t("theme.dark") }}
+                    </div>
+                </div>
+                <div class="switcher" @click="toggleLang">
+                    <div class="icon">
+                        <Languages />
+                    </div>
+                    <div>
+                        {{ $t("lang.name") + "：" + $t(`lang.${global.lang}`) }}
+                    </div>
+                </div>
+                <hr>
+                <div class="footer">{{ useEnv().copyright }}</div>
+            </div>
+        </Scrollable>
+    </div>
 </template>
 
 <script setup lang='ts'>
 import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
-import MusicPlayer from '@/components/MusicPlayer.vue';
-import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { defineAsyncComponent, ref } from 'vue';
+import { Sun, Moon, Languages } from 'lucide-vue-next';
 import Scrollable from './Scrollable.vue';
 
 const props = defineProps<{
     top: number
 }>();
+
+const MusicPlayer = defineAsyncComponent(() => import('@/components/MusicPlayer.vue'));
 
 const isOpen = ref(false);
 const global = useGlobal();
@@ -55,8 +56,6 @@ const global = useGlobal();
 const toggleTheme = () => {
     global.toggleTheme();
 };
-
-const { t } = useI18n();
 
 const toggleLang = () => {
     global.toggleLang();

@@ -17,13 +17,13 @@
                     <div id="subtitle-text">{{ $t("subtitle") }}</div>
                 </div>
                 <div class="quote">
-                    <i class="fa-solid fa-quote-left"></i>
+                    <Icon icon="quoteLeft" fill="var(--theme-color)" />
                     <p id="quote-text">{{ $t("quote") }}</p>
                 </div>
                 <div id="social">
                     <div v-for="link in socialLinks" :key="link.name" @click="openLink(link.href)" class="link"
                         :style="link.style">
-                        <i :class="link.iconClass" :style="{ color: link.color }"></i>
+                        <Icon :icon="link.icon" :fill="link.color" />
                     </div>
                 </div>
             </div>
@@ -54,12 +54,13 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, inject, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineAsyncComponent, inject, onMounted, onUnmounted, ref } from 'vue';
 import Scrollable from '@/components/Scrollable.vue';
 import dayjs from 'dayjs';
 import { useI18n } from "vue-i18n";
 import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
+const Icon = defineAsyncComponent(() => import('@/components/Icon.vue'));
 
 const scrollRef = ref<InstanceType<typeof Scrollable> | null>(null);
 
@@ -83,7 +84,6 @@ const socialLinks = computed(() => {
         return {
             ...link,
             style: `background: color-mix(in srgb, ${link.color} 20%, transparent)`,
-            iconClass: `fa-2x ${link.icon}`,
         };
     }).filter(link => link !== null);
 });
@@ -302,8 +302,8 @@ onUnmounted(() => {
     background: linear-gradient(to right bottom, var(--theme-color-light), transparent);
 }
 
-.quote>.fa-quote-left {
-    font-size: 1.5rem;
+.quote>svg {
+    width: 1.5rem;
     color: var(--theme-color);
     margin-right: 1rem;
 }

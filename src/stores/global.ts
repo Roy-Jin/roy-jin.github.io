@@ -11,6 +11,7 @@ export const useGlobal = defineStore("global", {
     },
     repos: [] as any[],
     music: {
+      dataUpd: 0 as number,
       data: [] as {
         url: string;
         name: string;
@@ -23,8 +24,11 @@ export const useGlobal = defineStore("global", {
       name: "" as string,
       pic: "" as string,
       url: "" as string,
+      curLrc: "" as string,
+      themeColor: "" as string,
       order: "loop" as string,
       audio: null as HTMLAudioElement | null,
+      isPlaying: false as boolean,
     },
   }),
 

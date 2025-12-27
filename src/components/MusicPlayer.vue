@@ -9,7 +9,7 @@
                     <div class="name">{{ global.music.name }}</div>
                     <div class="artist">{{ global.music.artist }}</div>
                 </div>
-                <div class="cur-lyric">{{ currentLyric }}</div>
+                <div class="cur-lyric">{{ global.music.curLrc }}</div>
                 <div class="progress-container">
                     <div class="cur-time">{{ formatTime(currentTime) }}</div>
                     <div class="progress-bar" @click="seekTo">
@@ -23,7 +23,7 @@
             <div class="controls">
                 <div v-for="control in controls" :key="control.type" :class="['control', control.type]"
                     @click="control.onClicked">
-                    <i :class="control.class" :style="{ color: control.color }"></i>
+                    <component :is="control.comp" :color="control.color" :fill="control.fill ?? 'transparent'" />
                 </div>
             </div>
         </div>
@@ -36,10 +36,22 @@
 <script setup lang='ts'>
 import { Lrc } from 'lrc-kit';
 import { useEnv } from "@/stores/env";
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch, type FunctionalComponent } from "vue";
 import { useGlobal } from '@/stores/global';
 import ColorThief from "colorthief";
 import { useI18n } from 'vue-i18n';
+import {
+    Repeat,
+    Repeat1,
+    Play,
+    Pause,
+    SkipForward,
+    SkipBack,
+    Volume1,
+    Volume2,
+    Shuffle,
+    Volume
+} from 'lucide-vue-next';
 
 const { music: musicConfig } = useEnv();
 const global = useGlobal();
@@ -52,8 +64,9 @@ const { t } = useI18n();
 // 响应式数据
 const currentTime = ref(0);
 const duration = ref(0);
-const currentLyric = ref(t("music.noLyric"));
 const lyrics = ref<{ content: string; timestamp: number }[]>([]);
+
+const emit = defineEmits(["play", "pause"]);
 
 // 计算属性
 const progressPercentage = computed(() => {
@@ -63,47 +76,45 @@ const progressPercentage = computed(() => {
 const controls = ref([
     {
         type: "order",
-        class: "fa fa-repeat",
+        comp: Repeat,
         color: "var(--text-color)",
         onClicked: () => { toggleOrder(); }
     },
     {
         type: "prev",
-        class: "fa fa-step-backward",
+        comp: SkipBack,
         color: "var(--text-color)",
         onClicked: () => { previousSong(); }
     },
     {
         type: "play",
-        class: "fa fa-play",
+        comp: Play,
         color: "var(--play-color)",
+        fill: "var(--play-color)",
         onClicked: () => { togglePlay(); }
     },
     {
         type: "next",
-        class: "fa fa-step-forward",
+        comp: SkipForward,
         color: "var(--text-color)",
         onClicked: () => { nextSong(); }
     },
     {
         type: "volume",
-        class: "fa fa-volume-down",
+        comp: Volume1,
         color: "var(--text-color)",
         onClicked: () => { toggleVolume(); }
     }
 ]);
-
-const api_url = new URL(musicConfig.api);
-api_url.searchParams.set("server", musicConfig.server);
-api_url.searchParams.set("type", musicConfig.type);
-api_url.searchParams.set("id", musicConfig.id);
 
 // 解析歌词
 const parseLrcUrl = async (url: string): Promise<{ content: string; timestamp: number }[]> => {
     try {
         const response = await fetch(url);
         const text = await response.text();
-        return Lrc.parse(text).lyrics;
+        const lrc = Lrc.parse(text);
+        if (lrc.lyrics.length === 0) throw new Error(t("music.noLyric"));
+        return lrc.lyrics.filter(lyric => lyric.content.trim() !== '');
     } catch (error) {
         return [{ content: t("music.noLyric"), timestamp: 0 }];
     }
@@ -135,17 +146,17 @@ const togglePlay = () => {
 }
 
 const upPause = () => {
+    emit("pause")
     const _ = controls.value.find(control => control.type === 'play');
-    if (_) {
-        _.class = "fa fa-play"
-    }
+    if (_) _.comp = Play;
+    global.music.isPlaying = false;
 }
 
 const upPlay = () => {
+    emit("play")
     const _ = controls.value.find(control => control.type === 'play');
-    if (_) {
-        _.class = "fa fa-pause"
-    }
+    if (_) _.comp = Pause;
+    global.music.isPlaying = true;
 }
 
 // 上一首
@@ -215,15 +226,11 @@ const loadSong = async (song: any, autoPlay = true) => {
     global.music.lrc = song.lrc;
 
     // 加载歌词
-    if (song.lrc) {
-        lyrics.value = await parseLrcUrl(song.lrc);
-    } else {
-        lyrics.value = [{ content: t("music.noLyric"), timestamp: 0 }];
-    }
+    lyrics.value = await parseLrcUrl(song.lrc);
 
     // 重置播放状态
     currentTime.value = 0;
-    currentLyric.value = lyrics.value[0]?.content as string;
+    global.music.curLrc = lyrics.value[0]?.content as string;
 
     // 重新加载音频
     if (audioRef.value) {
@@ -236,7 +243,7 @@ const loadSong = async (song: any, autoPlay = true) => {
 const updateCurrentLyric = () => {
     if (lyrics.value.length === 0) return;
 
-    const currentTimeMs = currentTime.value * 1000;
+    const currentTimeMs = currentTime.value;
     let currentLyricIndex = 0;
 
     for (let i = 0; i < lyrics.value.length; i++) {
@@ -247,7 +254,7 @@ const updateCurrentLyric = () => {
         }
     }
 
-    currentLyric.value = lyrics.value[currentLyricIndex]?.content as string;
+    global.music.curLrc = lyrics.value[currentLyricIndex]?.content as string;
 }
 
 // 格式化时间
@@ -280,11 +287,11 @@ const toggleOrder = () => {
     const _ = controls.value.find(control => control.type === 'order');
     if (_) {
         const orders = ['random', 'loop', 'single'];
-        const orderIcons = ['fa-random', 'fa-repeat', 'fa-repeat-1'];
+        const orderIcons = [Shuffle, Repeat, Repeat1];
         const currentIndex = orders.indexOf(global.music.order);
         const nextIndex = (currentIndex + 1) % orders.length;
         global.music.order = orders[nextIndex] as string;
-        _.class = `fa ${orderIcons[nextIndex]}`;
+        _.comp = orderIcons[nextIndex] as FunctionalComponent;
     }
 }
 
@@ -293,12 +300,18 @@ const toggleVolume = () => {
     const _ = controls.value.find(control => control.type === 'volume');
     if (audioRef.value && _) {
         const volumes = [0.3, 0.6, 1]
-        const volumeIcons = ['fa-volume-down', 'fa-volume', 'fa-volume-up']
+        const volumeIcons = [Volume, Volume1, Volume2]
         const currentIndex = volumes.indexOf(audioRef.value.volume);
         const nextIndex = (currentIndex + 1) % volumes.length;
         audioRef.value.volume = volumes[nextIndex] as number;
-        _.class = `fa ${volumeIcons[nextIndex]}`;
+        _.comp = volumeIcons[nextIndex] as FunctionalComponent;
     }
+}
+
+const loadThemeColor = () => {
+    const color = colorThief.getColor(coverImg.value as HTMLImageElement);
+    Player.value?.style.setProperty('--theme-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
+    global.music.themeColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 }
 
 // 监听当前歌曲变化
@@ -313,35 +326,58 @@ watch(() => global.music.url, (newUrl, oldUrl) => {
 
 onMounted(async () => {
     try {
-        const response = await fetch(api_url.href);
-        const data = await response.json();
-        global.music.data = data;
+        const diffTime = (Date.now() - global.music.dataUpd);
+        if (diffTime > 2 * 60 * 60 * 1000) {
+            const apis = musicConfig.apis;
+            for (let i = 0; i < apis.length; i++) {
+                const api = apis[i] as string;
+                const api_url = new URL(api);
+                api_url.searchParams.set("server", musicConfig.server);
+                api_url.searchParams.set("type", musicConfig.type);
+                api_url.searchParams.set("id", musicConfig.id);
+                const response = await fetch(api_url.href);
+                if (!response.ok) continue;
+                const data = await response.json() as any[];
+                global.music.data = data.reverse().map((song: any) => {
+                    return {
+                        url: song.url,
+                        name: song.name || song.title,
+                        artist: song.artist || song.author,
+                        pic: song.pic,
+                        lrc: song.lrc
+                    }
+                }); global.music.dataUpd = Date.now();
+                break;
+            }
+        }
 
-        coverImg.value?.addEventListener('load', (e) => {
-            const color = colorThief.getColor(e.target as HTMLImageElement);
-            Player.value?.style.setProperty('--theme-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-        })
+        coverImg.value?.addEventListener('load', loadThemeColor);
 
         if (global.music.data.length > 0 && !global.music.url) {
             loadSong(global.music.data[0], false);
         } else {
-            loadSong(global.music.data.find(song => song.url === global.music.url) || global.music.data[0]);
+            loadSong(global.music.data.find(song => song.url === global.music.url) || global.music.data[0], false);
         }
 
         const _order = controls.value.find(control => control.type === 'order');
         if (_order) {
-            const orderIcons = ['fa-random', 'fa-repeat', 'fa-repeat-1'];
+            const orderIcons = [Shuffle, Repeat, Repeat1];
             const orderIndex = ['random', 'loop', 'single'].indexOf(global.music.order);
-            _order.class = `fa ${orderIcons[orderIndex]}`;
+            _order.comp = orderIcons[orderIndex] as FunctionalComponent;
         }
 
         if (audioRef.value) {
-            audioRef.value.volume = 0.3;
+            audioRef.value.volume = 0.6; // 0.3 / 0.6 / 1
         }
     } catch (error) {
         console.error('[music]', error);
     }
 });
+
+onUnmounted(() => {
+    global.music.audio = null;
+    global.music.isPlaying = false;
+})
 </script>
 
 <style scoped>

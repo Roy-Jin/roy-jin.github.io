@@ -16,25 +16,25 @@ export const useEnv = defineStore("env", {
             {
                 name: "GitHub",
                 color: "var(--text-color)",
-                icon: "fa-brands fa-github",
+                icon: "github",
                 href: "https://github.com/Roy-Jin",
             },
             {
                 name: "Email",
                 color: "#ee7a5a",
-                icon: "fa-solid fa-envelope",
+                icon: "envelope",
                 href: "mailto:JinRoy@outlook.com",
             },
             {
                 name: "QQ",
                 color: "#12b7f5",
-                icon: "fa-brands fa-qq",
+                icon: "qq",
                 href: "https://qm.qq.com/q/2Qaj5mB6Jq",
             },
             {
                 name: "Bilibili",
                 color: "#fc8bab",
-                icon: "fa-brands fa-bilibili",
+                icon: "bilibili",
                 href: "https://space.bilibili.com/3461572714302163",
             },
         ],
@@ -45,7 +45,10 @@ export const useEnv = defineStore("env", {
         },
         copyright: "Copyright © 2024 - 2026 Roy-Jin",
         music: {
-            api: "https://api.injahow.cn/meting/",
+            apis: [
+                "https://api.i-meto.com/meting/api",
+                "https://api.injahow.cn/meting/",
+            ],
             server: "netease",
             type: "playlist",
             id: "7697114803",

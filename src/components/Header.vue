@@ -1,29 +1,54 @@
 <template>
     <div class="header" ref="headerRef" v-if="isShow">
-        <div class="title">
+        <div class="left">
             <img :src="envInfo.logo" alt="logo">
             <h2>{{ envInfo.title[0] }}<span class="subtitle">{{ envInfo.title[1] }}</span></h2>
         </div>
-        <div id="menu-btn" :class="'fa-solid fa-' + (menuRef?.isOpen ? 'times' : 'bars')" ref="menuBtnRef"
-            @click="toggleMenu"></div>
+        <div class="right">
+            <div class="musicInfo" v-if="global.music.isPlaying">
+                <div :style="{ color: `color-mix(in srgb, ${global.music.themeColor}, var(--text-color) 60%)` }">
+                    {{ global.music.name }}
+                </div>
+                <div>{{ global.music.curLrc }}</div>
+            </div>
+            <div class="menu-btn">
+                <component v-if="global.music.audio" :is="Disc3Icon" @click="tooglePlayPause" :size="24"
+                    :class="{ 'play': global.music.isPlaying, 'pause': !global.music.isPlaying }"
+                    :color="global.music.themeColor" />
+                <component :is="menuRef?.isOpen ? XIcon : MenuIcon" strokeWidth="3px" @click="toggleMenu" :size="32"
+                    color="var(--theme-color)" />
+            </div>
+        </div>
     </div>
     <Menu ref="menuRef" :top="height" />
 </template>
 
 <script setup lang='ts'>
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useEnv } from '@/stores/env';
-import Menu from './Menu.vue';
-const env = useEnv();
+import { useGlobal } from '@/stores/global';
+import { MenuIcon, XIcon, Disc3Icon } from 'lucide-vue-next';
+const Menu = defineAsyncComponent(() => import('@/components/Menu.vue'));
 
+const env = useEnv();
+const global = useGlobal();
 const headerRef = ref<HTMLDivElement | null>(null);
-const menuRef = ref<InstanceType<typeof Menu> | null>(null);
+const menuRef = ref<any | null>(null);
 const height = ref(0);
 const isShow = ref(true);
-let resizeObserver: ResizeObserver | null = null
+let resizeObserver: ResizeObserver | null = null;
 
 const toggleMenu = () => {
     menuRef.value?.toggle()
+}
+const tooglePlayPause = () => {
+    if (global.music.audio) {
+        if (!global.music.isPlaying) {
+            global.music.audio.play();
+        } else {
+            global.music.audio.pause();
+        }
+    }
 }
 
 const updateHeight = () => {
@@ -54,6 +79,7 @@ onMounted(async () => {
         })
         resizeObserver.observe(headerRef.value)
     }
+    global.music.isPlaying = false;
 })
 
 defineExpose({
@@ -80,101 +106,102 @@ defineExpose({
     z-index: 88;
 }
 
-.header>.title {
+.left {
     width: 100%;
     display: flex;
     align-items: end;
     font-size: x-large;
     flex-direction: row;
+    white-space: nowrap;
 }
 
-.header>.title>img {
+.left>img {
     width: 4rem;
     height: 4rem;
     margin-right: 0.5rem;
 }
 
-.header .subtitle {
+.subtitle {
     font-size: 60%;
     opacity: 0.6;
 }
 
-#menu-btn {
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--theme-color);
-    font-size: 200%;
-}
-
-#toggle-menu {
-    width: 100dvw;
-    height: 100dvh;
-    overflow: hidden;
-    position: fixed;
-    backdrop-filter: blur(0px);
-    border-radius: 50rem;
-    top: 50%;
-    right: 50%;
-    transition: var(--transition);
-    transform: translate(100%, -100%) scale(0);
-    pointer-events: none;
-    z-index: 77;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#toggle-menu[data-open] {
-    pointer-events: all;
-    border-radius: 0rem;
-    top: 50%;
-    right: 50%;
-    backdrop-filter: blur(50px);
-    transform: translate(50%, -50%) scale(1);
-}
-
-#toggle-menu>.link {
-    width: 80%;
-    max-width: 600px;
-    margin: 0.5rem;
-    font-size: x-large;
-    text-align: center;
-    border-bottom: 5px solid var(--theme-color);
-    background: var(--theme-color-light);
-    backdrop-filter: blur(20px);
-    border-radius: 10px;
-    transition: all 0.2s ease-in-out;
-    transform: scale(1);
-    font-weight: 900;
-    padding: 0.5rem 1rem;
-    opacity: 0.86;
+.right {
+    flex: 1;
     display: flex;
     flex-direction: row;
+}
+
+.musicInfo {
+    max-width: 10rem;
+    font-family: "仓耳渔阳体";
+    overflow: hidden;
+    margin-right: 0.5rem;
+    font-size: small;
+
+    &>div {
+        font-weight: bolder;
+        text-align: end;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    &>div:last-child {
+        font-weight: 100;
+        font-size: .5rem;
+        opacity: .6;
+    }
+
+}
+
+.menu-btn {
     gap: 1rem;
-}
+    height: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 
-#toggle-menu>.link[data-active] {
-    background: var(--theme-color-dark);
-    opacity: 1;
-}
+    .play {
+        filter: brightness(1.2) saturate(200%);
+        animation: spin 3s linear infinite;
+    }
 
-#toggle-menu>.link:active {
-    transform: scale(0.86);
+    .pause {
+        filter: brightness(1.2) opacity(0.5);
+    }
 }
 
 @media screen and (max-width: 768px) {
-    .header>.title {
+    .left {
         font-size: unset;
+
+        img {
+            width: 2rem;
+            height: 2rem;
+            margin-right: 0.5rem;
+        }
     }
 
-    .header>.title>img {
-        width: 2rem;
-        height: 2rem;
-        margin-right: 0.5rem;
+    .menu-btn {
+        gap: 0.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .musicInfo {
+        display: none;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 }
 </style>
