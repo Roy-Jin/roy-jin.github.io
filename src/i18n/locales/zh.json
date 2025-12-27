@@ -26,11 +26,5 @@
     "name": "语言",
     "zh": "中文",
     "en": "English"
-  },
-  "modal": {
-    "button": {
-      "confirm": "确认",
-      "cancel": "取消"
-    }
   }
 }

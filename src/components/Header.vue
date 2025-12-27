@@ -101,7 +101,7 @@ defineExpose({
     padding: 0.5rem 6%;
     align-items: center;
     justify-content: space-between;
-    backdrop-filter: blur(20px);
+    backdrop-filter: var(--filter-blur);
     background: var(--theme-color-light);
     z-index: 88;
 }
@@ -113,6 +113,7 @@ defineExpose({
     font-size: x-large;
     flex-direction: row;
     white-space: nowrap;
+    font-family: "Playball";
 }
 
 .left>img {

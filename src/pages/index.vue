@@ -54,26 +54,21 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent, inject, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue';
 import Scrollable from '@/components/Scrollable.vue';
 import dayjs from 'dayjs';
 import { useI18n } from "vue-i18n";
 import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
 const Icon = defineAsyncComponent(() => import('@/components/Icon.vue'));
+import { showConfirmDialog } from 'vant';
+import 'vant/es/dialog/style';
 
 const scrollRef = ref<InstanceType<typeof Scrollable> | null>(null);
 
 const { t } = useI18n();
 const env = useEnv();
 const global = useGlobal();
-
-const modal = inject('modal') as {
-    showToast: (options: any) => void
-    hideToast: () => void
-    showModal: (options: any) => void
-    hideModal: () => void
-}
 
 const socialLinks = computed(() => {
     return env.social.map(link => {
@@ -89,17 +84,15 @@ const socialLinks = computed(() => {
 });
 
 const openLink = (path: string) => {
-    modal.showModal({
-        type: 'confirm',
+    showConfirmDialog({
         title: t('tips.openLink.title'),
         message: t('tips.openLink.message'),
-        confirmText: t('modal.button.confirm'),
-        cancelText: t('modal.button.cancel'),
-        onConfirm: async () => {
-            window.open(path, '_blank');
-        },
-        onCancel: () => { }
-    })
+        cancelButtonColor: "color-mix(in srgb, grey 60%, transparent)",
+        confirmButtonColor: "var(--theme-color)",
+        closeOnClickOverlay: true
+    }).then(() => {
+        window.open(path, '_blank');
+    }).catch(() => { });
 }
 
 const apis = [
@@ -263,6 +256,10 @@ onUnmounted(() => {
     font-family: "Playball";
 }
 
+.ForMe #subtitle-text {
+    font-family: "Playball", "仓耳逍遥行书";
+}
+
 .ForMe>#social {
     gap: 1rem;
     padding: .5rem;
@@ -284,11 +281,6 @@ onUnmounted(() => {
     justify-content: center;
     background-color: var(--theme-color-light);
     color: color-mix(in srgb, var(--theme-color) 85%, transparent);
-}
-
-@font-face {
-    font-family: "仓耳逍遥行书";
-    src: url("@/assets/fonts/仓耳逍遥行书.ttf");
 }
 
 .ForMe>.quote {
@@ -332,6 +324,10 @@ onUnmounted(() => {
     justify-content: center;
     flex-direction: column;
     background: radial-gradient(ellipse at 33% 25%, var(--theme-color), transparent)
+}
+
+#date {
+    font-family: "Playball";
 }
 
 #date>.time {

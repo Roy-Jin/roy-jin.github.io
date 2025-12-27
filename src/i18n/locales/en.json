@@ -26,11 +26,5 @@
     "name": "Lang",
     "zh": "中文",
     "en": "English"
-  },
-  "modal": {
-    "button": {
-      "confirm": "Okay",
-      "cancel": "Cancel"
-    }
   }
 }

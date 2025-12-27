@@ -8,7 +8,7 @@
         <Scrollable class="content-wrapper">
             <div class="content">
                 <div class="title">
-                    <span>{{ useEnv().title[0] }}</span>/
+                    <span>{{ useEnv().title[0] }}</span>
                     <span>{{ useEnv().title[1] }}</span>
                 </div>
                 <MusicPlayer />
@@ -40,15 +40,14 @@
 <script setup lang='ts'>
 import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
-import { defineAsyncComponent, ref } from 'vue';
+import { ref } from 'vue';
 import { Sun, Moon, Languages } from 'lucide-vue-next';
 import Scrollable from './Scrollable.vue';
+import MusicPlayer from '@/components/MusicPlayer.vue';
 
 const props = defineProps<{
     top: number
 }>();
-
-const MusicPlayer = defineAsyncComponent(() => import('@/components/MusicPlayer.vue'));
 
 const isOpen = ref(false);
 const global = useGlobal();
@@ -88,7 +87,7 @@ defineExpose({
     max-width: 768px;
     overflow: hidden;
     position: fixed;
-    backdrop-filter: blur(30px);
+    backdrop-filter: var(--filter-blur);
     right: 0;
     transition: var(--transition);
     transform: translateX(100%);
@@ -114,6 +113,7 @@ defineExpose({
     flex-direction: column;
 
     .title {
+        font-family: "仓耳逍遥行书";
         margin: 3rem 0 3rem 0;
         font-weight: 900;
         font-size: xx-large;
