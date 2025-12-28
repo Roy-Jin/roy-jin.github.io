@@ -53,7 +53,7 @@ import {
     Volume
 } from 'lucide-vue-next';
 
-const { music: musicConfig } = useEnv();
+const env = useEnv();
 const global = useGlobal();
 const Player = ref<HTMLDivElement>();
 const coverImg = ref<HTMLImageElement>();
@@ -326,31 +326,7 @@ watch(() => global.music.url, (newUrl, oldUrl) => {
 
 onMounted(async () => {
     try {
-        const diffTime = (Date.now() - global.music.dataUpd);
-        if (diffTime > (60 * 60 * 1000)) {
-            const apis = musicConfig.apis;
-            for (let i = 0; i < apis.length; i++) {
-                const api = apis[i] as string;
-                const api_url = new URL(api);
-                api_url.searchParams.set("server", musicConfig.server);
-                api_url.searchParams.set("type", musicConfig.type);
-                api_url.searchParams.set("id", musicConfig.id);
-                const response = await fetch(api_url.href);
-                if (!response.ok) continue;
-                const data = await response.json() as any[];
-                global.music.data = data.reverse().map((song: any) => {
-                    return {
-                        url: song.url,
-                        name: song.name || song.title,
-                        artist: song.artist || song.author,
-                        pic: song.pic,
-                        lrc: song.lrc
-                    }
-                }); global.music.dataUpd = Date.now();
-                break;
-            }
-        }
-
+        await global.loadMusic(env.music);
         coverImg.value?.addEventListener('load', loadThemeColor);
 
         if (global.music.data.length > 0 && !global.music.url) {

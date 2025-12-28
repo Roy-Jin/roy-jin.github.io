@@ -9,10 +9,10 @@
   "subtitle": "嗨，欢迎来到我的个人网站！",
   "quote": "咖啡很苦，生活很甜！",
   "sayings": {
-    "error": "错误：语录加载失败",
     "from": {
       "one_yan": "来自一言",
-      "funny": "憨憨语录"
+      "funny": "憨憨语录",
+      "facts": "这是事实"
     }
   },
   "music": {

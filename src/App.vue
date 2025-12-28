@@ -3,7 +3,7 @@
   <div class="views" :style="{ paddingTop: headerHeight + 'px' }">
     <router-view />
   </div>
-  <TargetCursor :spin-duration="4" />
+  <TargetCursor :spin-duration="1.5" />
   <van-config-provider :theme="global.theme" />
 </template>
 

@@ -9,10 +9,10 @@
   "subtitle": "Hi, welcome to my personal website!",
   "quote": "Coffee is bitter, Life is sweet.",
   "sayings": {
-    "error": "ERROR: Failed to load sayings.",
     "from": {
       "one_yan": "One Yan",
-      "funny": "Funny Sayings"
+      "funny": "Funny Sayings",
+      "facts": "Thats fact"
     }
   },
   "music": {

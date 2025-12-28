@@ -47,12 +47,12 @@
                     </div>
                     <hr>
                     <div id="sayings">
-                        <p class="text">{{ sayings.text }}</p>
-                        <p class="from">——《{{ sayings.from }}》</p>
+                        <p class="text">{{ global.sayings.text }}</p>
+                        <p class="from">——《{{ $t(global.sayings.from) }}》</p>
                     </div>
                 </div>
                 <div id="projects">
-                    <div v-for="repo in repos" @click="openLink(repo.html_url)" class="project cursor-target"
+                    <div v-for="repo in global.gh_repos" @click="openLink(repo.html_url)" class="project cursor-target"
                         :style="{ background: `color-mix(in srgb, ${repo.color ?? ''} 20%, transparent)` }">
                         <div class="text">{{ repo.name }}</div>
                     </div>
@@ -105,61 +105,11 @@ const openLink = (path: string) => {
     }).catch(() => { });
 }
 
-const apis = [
-    {
-        enable: true,
-        name: "xxapi/dujitang",
-        url: "https://v2.xxapi.cn/api/dujitang",
-        format: async (data: any) => {
-            data = await data.json();
-            return { text: data.data, from: t("sayings.from.funny") };
-        },
-    },
-    {
-        enable: true,
-        name: "hitokoto",
-        url: "https://v1.hitokoto.cn/",
-        format: async (data: any) => {
-            data = await data.json();
-            return { text: await data.hitokoto, from: data.from };
-        },
-    },
-    {
-        enable: true,
-        name: "jkapi/one_yan",
-        url: "https://jkapi.com/api/one_yan",
-        format: async (data: any) => {
-            return {
-                text: await data.text(),
-                from: t("sayings.from.one_yan"),
-            };
-        },
-    },
-    {
-        enable: true,
-        name: "jkapi/dujitang",
-        url: "https://jkapi.com/api/dujitang",
-        format: async (data: any) => {
-            return {
-                text: await data.text(),
-                from: t("sayings.from.funny"),
-            };
-        },
-    },
-];
-
 const moment = ref({
     num: [0, 0, 0],
     sub: "AM",
     day: "Monday, 1 January."
 })
-
-const sayings = ref({
-    text: t("tips.loading"),
-    from: t("tips.loading")
-})
-
-const repos = ref(global.repos);
 
 let updateMoment: any = () => updateMoment = setInterval(() => {
     const now = dayjs();
@@ -173,57 +123,12 @@ let updateMoment: any = () => updateMoment = setInterval(() => {
     }
 }, 1);
 
-// 获取随机语录
-const getSayings = async () => {
-    const enabledAPIs = apis.filter(api => api.enable);
-    if (enabledAPIs.length === 0) { return console.warn("[sayings] No available APIs.") };
-    const randomAPI = enabledAPIs[Math.floor(Math.random() * enabledAPIs.length)];
-    if (!randomAPI) return;
-
-    const response = await fetch(randomAPI.url)
-        .catch(e => { return { ok: false, error: e } });
-    if (response.ok) {
-        const formated = await randomAPI.format(response);
-        sayings.value = {
-            text: formated.text,
-            from: formated.from
-        }
-        global.sayings = {
-            text: formated.text,
-            from: formated.from
-        }
-    } else {
-        randomAPI.enable = false;
-        if (apis.filter(api => api.enable).length === 0) {
-            sayings.value = global.sayings;
-        } else {
-            return getSayings();
-        }
-    }
-};
-
-const getRepos = async () => {
-    if ((Date.now() - global.repos_upd) < (60 * 60 * 1000)) return;
-    const url = env.github_repos.api.replace('%name%', env.github_repos.name)
-    const rep =
-        await fetch(url)
-            .then(response => response.json())
-            .then(data =>
-                data
-                    .sort((a: any, b: any) => b.stargazers_count - a.stargazers_count)
-                    .splice(0, env.github_repos.show_count)
-            );
-    if (!rep) return console.warn("[repos] Failed to fetch data.");
-    repos.value = rep;
-    global.repos = rep;
-}
-
 onMounted(async () => {
     updateMoment();
-    await getSayings();
-    await getRepos();
+    await global.loadSayings(env.sayings);
+    await global.loadGhRepos(env.gh_repos);
     scrollRef.value?.refresh();
-    scrollRef.value?.scrollTo(0, 0)
+    scrollRef.value?.scrollTo(0, 0);
 })
 
 onUnmounted(() => {

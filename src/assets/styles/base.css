@@ -58,6 +58,15 @@
     cursor: url('@/assets/cursor.svg') 16 16, auto !important;
 }
 
+button,
+.cursor-target {
+    cursor: url('@/assets/cursor2.svg') 16 16, auto !important;
+
+    * {
+        cursor: inherit !important;
+    }
+}
+
 html,
 body {
     width: 100dvw;

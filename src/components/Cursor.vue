@@ -11,7 +11,7 @@ interface TargetCursorProps {
 const showCursor = ref(false);
 
 const props = withDefaults(defineProps<TargetCursorProps>(), {
-    targetSelector: '.cursor-target .van-button',
+    targetSelector: '.cursor-target, button',
     spinDuration: 2,
     hideDefaultCursor: true
 });
@@ -96,10 +96,10 @@ const setupAnimation = () => {
 
         const allTargets: Element[] = [];
         let current = directTarget;
-        const targets = props.targetSelector.split(' ') as string[];
+        const targets = props.targetSelector.split(',') as string[];
         while (current && current !== document.body) {
             for (let i = 0; i < targets.length; i++) {
-                const selector = targets[i];
+                const selector = targets[i]?.trim();
                 if (selector && current.matches(selector)) {
                     allTargets.push(current);
                 }
