@@ -129,6 +129,7 @@ onMounted(async () => {
     await global.loadGhRepos(env.gh_repos);
     scrollRef.value?.refresh();
     scrollRef.value?.scrollTo(0, 0);
+    document.getElementById("loading")?.setAttribute("data-hidden", "TRUE");
 })
 
 onUnmounted(() => {

@@ -26,9 +26,6 @@ provide('header', {
 })
 
 onMounted(() => {
-  window.addEventListener('load', () => {
-    document.getElementById("loading")?.setAttribute("data-hidden", "TRUE");
-  })
   document.oncontextmenu = () => false;
   document.documentElement.setAttribute('data-theme', global.theme);
   useGlobal().initLang();
