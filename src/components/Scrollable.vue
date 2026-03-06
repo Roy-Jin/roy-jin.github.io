@@ -37,7 +37,7 @@ const defaultOptions: Options = {
 }
 
 const debounce = (func: Function, wait: number) => {
-    let timeout: number;
+    let timeout: ReturnType<typeof setTimeout>;
     return (...args: any[]) => {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
