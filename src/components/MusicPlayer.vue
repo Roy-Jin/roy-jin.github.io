@@ -38,7 +38,7 @@ import { Lrc } from 'lrc-kit';
 import { useEnv } from "@/stores/env";
 import { computed, onMounted, onUnmounted, ref, watch, type FunctionalComponent } from "vue";
 import { useGlobal } from '@/stores/global';
-import ColorThief from "colorthief";
+import { getColorSync } from "colorthief";
 import { useI18n } from 'vue-i18n';
 import {
     Repeat,
@@ -58,7 +58,6 @@ const global = useGlobal();
 const Player = ref<HTMLDivElement>();
 const coverImg = ref<HTMLImageElement>();
 const audioRef = ref<HTMLAudioElement | null>(null);
-const colorThief = new ColorThief();
 const { t } = useI18n();
 
 // 响应式数据
@@ -309,9 +308,11 @@ const toggleVolume = () => {
 }
 
 const loadThemeColor = () => {
-    const color = colorThief.getColor(coverImg.value as HTMLImageElement);
-    Player.value?.style.setProperty('--theme-color', `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-    global.music.themeColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+    const color = getColorSync(coverImg.value as HTMLImageElement);
+    if (color) {
+        Player.value?.style.setProperty('--theme-color', color.hex());
+        global.music.themeColor = color.hex();
+    }
 }
 
 // 监听当前歌曲变化

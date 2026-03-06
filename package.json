@@ -16,7 +16,7 @@
   "dependencies": {
     "@better-scroll/core": "^2.5.1",
     "@vant/touch-emulator": "^1.4.0",
-    "colorthief": "^2.6.0",
+    "colorthief": "3.3.0",
     "dayjs": "^1.11.19",
     "gsap": "^3.14.2",
     "lrc-kit": "1.1.1",
@@ -32,7 +32,6 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",
     "@tsconfig/node24": "^24.0.3",
-    "@types/colorthief": "^2.6.1",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
     "@vue/tsconfig": "^0.8.1",

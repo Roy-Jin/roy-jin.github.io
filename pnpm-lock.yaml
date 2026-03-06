@@ -15,8 +15,8 @@ importers:
         specifier: ^1.4.0
         version: 1.5.0
       colorthief:
-        specifier: ^2.6.0
-        version: 2.7.0
+        specifier: 3.3.0
+        version: 3.3.0(sharp@0.33.5)
       dayjs:
         specifier: ^1.11.19
         version: 1.11.19
@@ -57,9 +57,6 @@ importers:
       '@tsconfig/node24':
         specifier: ^24.0.3
         version: 24.0.4
-      '@types/colorthief':
-        specifier: ^2.6.0
-        version: 2.6.1
       '@types/node':
         specifier: ^24.10.1
         version: 24.11.2
@@ -543,9 +540,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@lokesh.dhakar/quantize@1.4.0':
-    resolution: {integrity: sha512-+//cqVWKis//t0YH62EDtwaFSPG/CDtYNg4CZmzNmG2d5W17Iu3fuDAdpQXCDHUDrrU9q0veze4A7tPZXlR/mg==}
-
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
@@ -787,14 +781,8 @@ packages:
   '@tsconfig/node24@24.0.4':
     resolution: {integrity: sha512-2A933l5P5oCbv6qSxHs7ckKwobs8BDAe9SJ/Xr2Hy+nDlwmLE1GhFh/g/vXGRZWgxBg9nX/5piDtHR9Dkw/XuA==}
 
-  '@types/colorthief@2.6.1':
-    resolution: {integrity: sha512-3hlRky7ybPuQDNx3RV29P/CTvuC7zkk//Xt/NyOwNg5RhL/y54a0q4aW7MNMkvBkGJqX2g2igNCoCh3ZtK4gZQ==}
-
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
-
-  '@types/ndarray@1.0.14':
-    resolution: {integrity: sha512-oANmFZMnFQvb219SSBIhI1Ih/r4CvHDOzkWyJS/XRqkMrGH5/kaPSA1hQhdIBzouaE+5KpE/f5ylI9cujmckQg==}
 
   '@types/node@24.11.2':
     resolution: {integrity: sha512-HTsxyfkxTNxOXBsEdgIOzbMgBjDGPvkTfw0B1m09j1LFPk8u3tSL8SNBRTSc381wXXX/Wp93qPi1kQXwnWuHgA==}
@@ -995,8 +983,14 @@ packages:
     resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
     engines: {node: '>=12.5.0'}
 
-  colorthief@2.7.0:
-    resolution: {integrity: sha512-iOLPi3bzz0ZBLEGEFXhP19/DsT9aVeE8fK4Yfz2efkUiE01G7ku6u5xqYGpOX9Dbs2V1K2t0XvW8sGJFGNa9Nw==}
+  colorthief@3.3.0:
+    resolution: {integrity: sha512-0hMB8YKZjI5QqLjw2FwN2EQOA8A8GW32TNWUJMdxh+dL3fi6WM1Q1iJK25R4X9d2L6EhV+7ey25CQHTTvMik4Q==}
+    hasBin: true
+    peerDependencies:
+      sharp: '>=0.33.0'
+    peerDependenciesMeta:
+      sharp:
+        optional: true
 
   confbox@0.1.8:
     resolution: {integrity: sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==}
@@ -1017,9 +1011,6 @@ packages:
 
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
-
-  cwise-compiler@1.1.3:
-    resolution: {integrity: sha512-WXlK/m+Di8DMMcCjcWr4i+XzcQra9eCdXIJrgh4TUgh0pIS/yJduLxS9JgefsHJ/YVLdgPtXm9r62W92MvanEQ==}
 
   dayjs@1.11.19:
     resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
@@ -1125,14 +1116,8 @@ packages:
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
 
-  iota-array@1.0.0:
-    resolution: {integrity: sha512-pZ2xT+LOHckCatGQ3DcG/a+QuEqvoxqkiL7tvE8nn3uuu+f6i1TtpB5/FtWFbxUuVr5PZCx8KskuGatbJDXOWA==}
-
   is-arrayish@0.3.4:
     resolution: {integrity: sha512-m6UrgzFVUYawGBh1dUsWR5M2Clqic9RVXC/9f8ceNlv2IcO9j9J/z8UoCLPqtsPBFNzEpfR3xftohbfqDx8EQA==}
-
-  is-buffer@1.1.6:
-    resolution: {integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==}
 
   is-docker@3.0.0:
     resolution: {integrity: sha512-eljcgEDlEns/7AXFosB5K/2nCM4P7FQPkGc/DWLy5rmFEWvZayGrik1d9/QIY5nJ4f9YsVvBkA6kJpHn9rISdQ==}
@@ -1316,15 +1301,6 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  ndarray-ops@1.2.2:
-    resolution: {integrity: sha512-BppWAFRjMYF7N/r6Ie51q6D4fs0iiGmeXIACKY66fLpnwIui3Wc3CXiD/30mgLbDjPpSLrsqcp3Z62+IcHZsDw==}
-
-  ndarray-pixels@4.1.0:
-    resolution: {integrity: sha512-xKPI4zXJ2pkUcVX24zIN1AWqqPWvRWWhRuO6PlY4EdB2VNRauNwA6rDdsAQG/ldQp0sU7nTXgPR/io1duy3Zyg==}
-
-  ndarray@1.0.19:
-    resolution: {integrity: sha512-B4JHA4vdyZU30ELBw3g7/p9bZupyew5a7tX1Y/gGeF2hafrPaQZhgrGQfsvgfYbgdFZjYwuEcnaobeM/WMW+HQ==}
-
   node-releases@2.0.36:
     resolution: {integrity: sha512-TdC8FSgHz8Mwtw9g5L4gR/Sh9XhSP/0DEkQxfEFXOpiul5IiHgHan2VhYYb6agDSfp4KuvltmGApc8HMgUrIkA==}
 
@@ -1503,9 +1479,6 @@ packages:
 
   undici-types@7.16.0:
     resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
-
-  uniq@1.0.1:
-    resolution: {integrity: sha512-Gw+zz50YNKPDKXs+9d+aKAjVwpjNwqzvNpLigIruT4HA9lMZNdMqs9x07kKHB/L9WRzqp4+DlTU5s4wG2esdoA==}
 
   unplugin-utils@0.3.1:
     resolution: {integrity: sha512-5lWVjgi6vuHhJ526bI4nlCOmkCIF3nnfXkCMDeMJrtdvxTs6ZFCM8oNufGTsDbKv/tJ/xj8RpvXjRuPBZJuJog==}
@@ -2048,8 +2021,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@lokesh.dhakar/quantize@1.4.0': {}
-
   '@polka/url@1.0.0-next.29': {}
 
   '@rolldown/pluginutils@1.0.0-rc.2': {}
@@ -2199,13 +2170,7 @@ snapshots:
 
   '@tsconfig/node24@24.0.4': {}
 
-  '@types/colorthief@2.6.1':
-    dependencies:
-      '@types/node': 24.11.2
-
   '@types/estree@1.0.8': {}
-
-  '@types/ndarray@1.0.14': {}
 
   '@types/node@24.11.2':
     dependencies:
@@ -2438,23 +2403,25 @@ snapshots:
   color-convert@2.0.1:
     dependencies:
       color-name: 1.1.4
+    optional: true
 
-  color-name@1.1.4: {}
+  color-name@1.1.4:
+    optional: true
 
   color-string@1.9.1:
     dependencies:
       color-name: 1.1.4
       simple-swizzle: 0.2.4
+    optional: true
 
   color@4.2.3:
     dependencies:
       color-convert: 2.0.1
       color-string: 1.9.1
+    optional: true
 
-  colorthief@2.7.0:
-    dependencies:
-      '@lokesh.dhakar/quantize': 1.4.0
-      ndarray-pixels: 4.1.0
+  colorthief@3.3.0(sharp@0.33.5):
+    optionalDependencies:
       sharp: 0.33.5
 
   confbox@0.1.8: {}
@@ -2474,10 +2441,6 @@ snapshots:
       which: 2.0.2
 
   csstype@3.2.3: {}
-
-  cwise-compiler@1.1.3:
-    dependencies:
-      uniq: 1.0.1
 
   dayjs@1.11.19: {}
 
@@ -2567,11 +2530,8 @@ snapshots:
 
   hookable@5.5.3: {}
 
-  iota-array@1.0.0: {}
-
-  is-arrayish@0.3.4: {}
-
-  is-buffer@1.1.6: {}
+  is-arrayish@0.3.4:
+    optional: true
 
   is-docker@3.0.0: {}
 
@@ -2711,22 +2671,6 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  ndarray-ops@1.2.2:
-    dependencies:
-      cwise-compiler: 1.1.3
-
-  ndarray-pixels@4.1.0:
-    dependencies:
-      '@types/ndarray': 1.0.14
-      ndarray: 1.0.19
-      ndarray-ops: 1.2.2
-      sharp: 0.33.5
-
-  ndarray@1.0.19:
-    dependencies:
-      iota-array: 1.0.0
-      is-buffer: 1.1.6
-
   node-releases@2.0.36: {}
 
   npm-normalize-package-bin@4.0.0: {}
@@ -2846,7 +2790,8 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.7.4: {}
+  semver@7.7.4:
+    optional: true
 
   sharp@0.33.5:
     dependencies:
@@ -2873,6 +2818,7 @@ snapshots:
       '@img/sharp-wasm32': 0.33.5
       '@img/sharp-win32-ia32': 0.33.5
       '@img/sharp-win32-x64': 0.33.5
+    optional: true
 
   shebang-command@2.0.0:
     dependencies:
@@ -2885,6 +2831,7 @@ snapshots:
   simple-swizzle@0.2.4:
     dependencies:
       is-arrayish: 0.3.4
+    optional: true
 
   sirv@3.0.2:
     dependencies:
@@ -2918,8 +2865,6 @@ snapshots:
   ufo@1.6.3: {}
 
   undici-types@7.16.0: {}
-
-  uniq@1.0.1: {}
 
   unplugin-utils@0.3.1:
     dependencies:
