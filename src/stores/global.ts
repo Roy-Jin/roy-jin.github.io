@@ -30,7 +30,7 @@ export const useGlobal = defineStore("global", {
       url: "" as string,
       curLrc: "" as string,
       themeColor: "" as string,
-      order: "loop" as string,
+      order: "random" as string,
       audio: null as HTMLAudioElement | null,
       isPlaying: false as boolean,
     },

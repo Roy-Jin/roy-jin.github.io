@@ -75,7 +75,7 @@ const progressPercentage = computed(() => {
 const controls = ref([
     {
         type: "order",
-        comp: Repeat,
+        comp: Shuffle,
         color: "var(--text-color)",
         onClicked: () => { toggleOrder(); }
     },
