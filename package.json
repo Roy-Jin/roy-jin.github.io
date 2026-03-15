@@ -19,7 +19,7 @@
     "colorthief": "3.3.0",
     "dayjs": "^1.11.19",
     "gsap": "^3.14.2",
-    "lrc-kit": "1.1.1",
+    "lrc-kit": "^1.2.1",
     "lucide-vue-next": "^0.562.0",
     "motion-v": "^1.7.4",
     "pinia": "^3.0.4",
