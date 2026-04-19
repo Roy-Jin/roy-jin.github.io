@@ -130,23 +130,27 @@ export const useGlobal = defineStore("global", {
       const apis = config.apis;
       for (let i = 0; i < apis.length; i++) {
         const api = apis[i] as string;
-        const api_url = new URL(api);
-        api_url.searchParams.set("server", config.server);
-        api_url.searchParams.set("type", config.type);
-        api_url.searchParams.set("id", config.id);
-        const response = await fetch(api_url.href);
-        if (!response.ok) continue;
-        const data = await response.json() as any[];
-        this.music.data = data.reverse().map((song: any) => {
-          return {
-            url: song.url,
-            name: song.name || song.title,
-            artist: song.artist || song.author,
-            pic: song.pic,
-            lrc: song.lrc,
-          };
-        });
-        break;
+        try {
+          const api_url = new URL(api);
+          api_url.searchParams.set("server", config.server);
+          api_url.searchParams.set("type", config.type);
+          api_url.searchParams.set("id", config.id);
+          const response = await fetch(api_url.href);
+          if (!response.ok) continue;
+          const data = await response.json() as any[];
+          this.music.data = data.reverse().map((song: any) => {
+            return {
+              url: song.url,
+              name: song.name || song.title,
+              artist: song.artist || song.author,
+              pic: song.pic,
+              lrc: song.lrc,
+            };
+          });
+          break;
+        } catch (e) {
+          continue;
+        }
       }
       this.updated_at.music = Date.now();
     },

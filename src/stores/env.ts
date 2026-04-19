@@ -103,12 +103,14 @@ export const useEnv = defineStore("env", {
         },
         music: {
             apis: [
-                "https://api.i-meto.com/meting/api",
+                "https://api.qijieya.cn/meting/",
                 "https://api.injahow.cn/meting/",
+                "https://api.moeyao.cn/meting/",
+                "https://api.i-meto.com/meting/",
             ],
             server: "netease",
             type: "playlist",
-            id: "7697114803",
+            id: "7104284836",
             upd_freq: (1000 * 60) * 10, // 10 minutes
         },
         copyright: "Copyright © 2024 - 2026 Roy-Jin",
