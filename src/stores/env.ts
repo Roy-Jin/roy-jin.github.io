@@ -110,7 +110,7 @@ export const useEnv = defineStore("env", {
             ],
             server: "netease",
             type: "playlist",
-            id: "7104284836",
+            id: "7697114803",
             upd_freq: (1000 * 60) * 10, // 10 minutes
         },
         copyright: "Copyright © 2024 - 2026 Roy-Jin",
