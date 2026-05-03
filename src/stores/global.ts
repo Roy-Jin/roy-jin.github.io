@@ -4,7 +4,12 @@ import { setI18nLanguage } from "@/i18n";
 export const useGlobal = defineStore("global", {
   state: () => ({
     lang: "zh" as string,
-    theme: "light" as "light" | "dark",
+    theme: (() => {
+      return window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    })() as "light" | "dark",
     sayings: {
       text: "" as string,
       from: "" as string,
@@ -49,7 +54,7 @@ export const useGlobal = defineStore("global", {
   actions: {
     toggleTheme(event?: { clientX: number; clientY: number }) {
       const newTheme = this.theme === "light" ? "dark" : "light";
-      
+
       const toggleThemeAction = () => {
         this.theme = newTheme;
         document.documentElement.setAttribute("data-theme", newTheme);
@@ -58,10 +63,10 @@ export const useGlobal = defineStore("global", {
       if (document.startViewTransition && event) {
         const x = event.clientX;
         const y = event.clientY;
-        
+
         const endRadius = Math.hypot(
           Math.max(x, window.innerWidth - x),
-          Math.max(y, window.innerHeight - y)
+          Math.max(y, window.innerHeight - y),
         );
 
         const transition = document.startViewTransition(() => {
@@ -71,18 +76,18 @@ export const useGlobal = defineStore("global", {
         transition.ready.then(() => {
           const clipPath = [
             `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`
+            `circle(${endRadius}px at ${x}px ${y}px)`,
           ];
-          
+
           document.documentElement.animate(
             {
               clipPath: clipPath,
             },
             {
               duration: 800,
-              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-              pseudoElement: '::view-transition-new(root)',
-            }
+              easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+              pseudoElement: "::view-transition-new(root)",
+            },
           );
         });
       } else {

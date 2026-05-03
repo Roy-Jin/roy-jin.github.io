@@ -98,7 +98,7 @@ export const useEnv = defineStore("env", {
         gh_repos: {
             user: "Roy-Jin",
             show_count: 4,
-            api: "https://api.github.com/users/{0}/repos?per_page=10",
+            api: "https://api.github.com/users/{0}/repos?per_page=20",
             upd_freq: (1000 * 60) * 10, // 10 minutes
         },
         music: {

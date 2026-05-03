@@ -331,9 +331,13 @@ onMounted(async () => {
         coverImg.value?.addEventListener('load', loadThemeColor);
 
         if (global.music.data.length > 0 && !global.music.url) {
-            loadSong(global.music.data[0], false);
+            const firstSong = global.music.order === 'random'
+                ? global.music.data[Math.floor(Math.random() * global.music.data.length)]
+                : global.music.data[0];
+            loadSong(firstSong, false);
         } else {
-            loadSong(global.music.data.find(song => song.url === global.music.url) || global.music.data[0], false);
+            const song = global.music.data.find(song => song.url === global.music.url) || global.music.data[0];
+            loadSong(song, false);
         }
 
         const _order = controls.value.find(control => control.type === 'order');
