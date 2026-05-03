@@ -51,8 +51,8 @@ const props = defineProps<{
 const isOpen = ref(false);
 const global = useGlobal();
 
-const toggleTheme = () => {
-    global.toggleTheme();
+const toggleTheme = (event: MouseEvent) => {
+    global.toggleTheme({ clientX: event.clientX, clientY: event.clientY });
 };
 
 const toggleLang = () => {

@@ -47,9 +47,47 @@ export const useGlobal = defineStore("global", {
   },
 
   actions: {
-    toggleTheme() {
-      this.theme = this.theme === "light" ? "dark" : "light";
-      document.documentElement.setAttribute("data-theme", this.theme);
+    toggleTheme(event?: { clientX: number; clientY: number }) {
+      const newTheme = this.theme === "light" ? "dark" : "light";
+      
+      const toggleThemeAction = () => {
+        this.theme = newTheme;
+        document.documentElement.setAttribute("data-theme", newTheme);
+      };
+
+      if (document.startViewTransition && event) {
+        const x = event.clientX;
+        const y = event.clientY;
+        
+        const endRadius = Math.hypot(
+          Math.max(x, window.innerWidth - x),
+          Math.max(y, window.innerHeight - y)
+        );
+
+        const transition = document.startViewTransition(() => {
+          toggleThemeAction();
+        });
+
+        transition.ready.then(() => {
+          const clipPath = [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`
+          ];
+          
+          document.documentElement.animate(
+            {
+              clipPath: clipPath,
+            },
+            {
+              duration: 800,
+              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              pseudoElement: '::view-transition-new(root)',
+            }
+          );
+        });
+      } else {
+        toggleThemeAction();
+      }
     },
 
     toggleLang(lang?: string) {
