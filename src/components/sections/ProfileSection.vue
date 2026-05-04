@@ -1,36 +1,24 @@
 <template>
     <div class="profile-section">
         <div class="base">
-            <Avatar :avatar="avatar" :avatar-video="avatar_video" />
-            <h4 class="name">{{ name }}</h4>
-            <div class="subtitle">{{ subtitle }}</div>
+            <Avatar />
+            <h4 class="name">{{ env.name }}</h4>
+            <div class="subtitle">{{ t('subtitle') }}</div>
         </div>
-        <Quote :quote="quote" />
-        <SocialLinks :links="socialLinks" @click="handleLinkClick" />
+        <Quote :quote="t('quote')" />
+        <SocialLinks @click="handleLinkClick" />
     </div>
 </template>
 
 <script setup lang='ts'>
-import { computed } from 'vue';
 import Avatar from '../ui/Avatar.vue';
 import Quote from '../ui/Quote.vue';
 import SocialLinks from '../ui/SocialLinks.vue';
+import { useEnv } from '@/stores/env';
+import { useI18n } from 'vue-i18n';
 
-interface SocialLink {
-    name: string;
-    color: string;
-    icon: string;
-    href: string;
-}
-
-const props = defineProps<{
-    name: string;
-    subtitle: string;
-    avatar: string;
-    avatar_video?: string;
-    quote: string;
-    socialLinks: SocialLink[];
-}>();
+const env = useEnv();
+const { t } = useI18n();
 
 const emit = defineEmits<{
     'link-click': [url: string];

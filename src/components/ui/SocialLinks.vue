@@ -1,6 +1,6 @@
 <template>
     <div class="social-links">
-        <div v-for="link in links" :key="link.name" @click="handleClick(link.href)"
+        <div v-for="link in socialLinks" :key="link.name" @click="handleClick(link.href)"
             class="link cursor-target">
             <Icon :icon="link.icon" :fill="link.color" />
         </div>
@@ -8,19 +8,21 @@
 </template>
 
 <script setup lang='ts'>
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent, computed } from 'vue';
+import { useEnv } from '@/stores/env';
 const Icon = defineAsyncComponent(() => import('../Icon.vue'));
 
-interface SocialLink {
-    name: string;
-    color: string;
-    icon: string;
-    href: string;
-}
+const env = useEnv();
 
-const props = defineProps<{
-    links: SocialLink[];
-}>();
+const socialLinks = computed(() => {
+    return env.social.map(link => {
+        if (!link.color || !link.icon || !link.href || !link.name) {
+            console.warn(`Invalid social link: ${JSON.stringify(link)}. Missing required properties.`);
+            return null;
+        }
+        return link;
+    }).filter(link => link !== null);
+});
 
 const emit = defineEmits<{
     click: [url: string];

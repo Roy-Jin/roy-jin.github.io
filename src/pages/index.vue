@@ -1,17 +1,9 @@
 <template>
     <Scrollable ref="scrollRef">
         <div class="wrapper">
-            <ProfileSection 
-                :name="env.name"
-                :subtitle="t('subtitle')"
-                :avatar="env.avatar[0] || ''"
-                :avatar-video="env.avatar_video"
-                :quote="t('quote')"
-                :social-links="socialLinks"
-                @link-click="openLink"
-            />
+            <ProfileSection @link-click="openLink" />
             <div class="content">
-                <TodaySection :saying="global.sayings" />
+                <TodaySection />
                 <div id="projects">
                     <RepoCard v-for="repo in filteredRepos" :key="repo.html_url" :repo="repo" @click="openLink" />
                 </div>
@@ -42,16 +34,6 @@ const scrollRef = ref<any>(null);
 
 const filteredRepos = computed(() => {
     return filterRepos(global.gh_repos, ['roy-jin', 'cloud', 'learn'], env.gh_repos.show_count);
-});
-
-const socialLinks = computed(() => {
-    return env.social.map(link => {
-        if (!link.color || !link.icon || !link.href || !link.name) {
-            console.warn(`Invalid social link: ${JSON.stringify(link)}. Missing required properties.`);
-            return null;
-        }
-        return link;
-    }).filter(link => link !== null);
 });
 
 const openLink = (path: string) => {

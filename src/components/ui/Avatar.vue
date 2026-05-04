@@ -9,12 +9,12 @@
         <foreignObject x="0" y="0" width="200" height="200" clip-path="url(#circleClip)">
             <div xmlns="http://www.w3.org/1999/xhtml"
                 style="position: relative; width: 200px; height: 200px;">
-                <img :src="avatar" style="width: 200px; height: 200px; object-fit: cover;" />
-                <video v-if="avatarVideo" width="200" height="200" autoplay loop muted playsinline disablepictureinpicture
+                <img :src="env.avatar[0]" style="width: 200px; height: 200px; object-fit: cover;" />
+                <video v-if="env.avatar_video" width="200" height="200" autoplay loop muted playsinline disablepictureinpicture
                     disableremoteplayback
                     style="width: 200px; height: 200px; position: absolute; top: 0; left: 0; object-fit: cover;"
                     controlslist="nodownload nofullscreen noremoteplayback">
-                    <source :src="avatarVideo" type="video/webm" />
+                    <source :src="env.avatar_video" type="video/webm" />
                 </video>
                 <div
                     style="position: absolute; top: 0; left: 0; width: 200px; height: 200px; pointer-events: none;">
@@ -25,10 +25,9 @@
 </template>
 
 <script setup lang='ts'>
-const props = defineProps<{
-    avatar: string;
-    avatarVideo?: string;
-}>();
+import { useEnv } from '@/stores/env';
+
+const env = useEnv();
 </script>
 
 <style scoped>

@@ -18,8 +18,8 @@
         </div>
         <hr>
         <div id="sayings">
-            <p class="text">{{ saying.text }}</p>
-            <p class="from">——《{{ t(saying.from) }}》</p>
+            <p class="text">{{ global.sayings.text }}</p>
+            <p class="from">——《{{ t(global.sayings.from) }}》</p>
         </div>
     </div>
 </template>
@@ -29,15 +29,10 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import dayjs from 'dayjs';
 import Counter from '../Counter.vue';
 import { useI18n } from 'vue-i18n';
+import { useGlobal } from '@/stores/global';
 
 const { t } = useI18n(); 
-
-const props = defineProps<{
-    saying: {
-        text: string;
-        from: string;
-    };
-}>();
+const global = useGlobal();
 
 const time = ref({
     hours: 0,
