@@ -11,7 +11,7 @@ interface TargetCursorProps {
 const showCursor = ref(false);
 
 const props = withDefaults(defineProps<TargetCursorProps>(), {
-    targetSelector: '.cursor-target, button',
+    targetSelector: '.cursor-target, button, .control',
     spinDuration: 2,
     hideDefaultCursor: true
 });

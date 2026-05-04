@@ -3,7 +3,6 @@
         <div class="top">
             <div class="cover-container" @click="toggleCoverMode">
                 <div class="vinyl-disc" :class="{ 'rotating': global.music.isPlaying && !isStaticMode, 'hidden': isStaticMode }"></div>
-                <div class="vinyl-grooves" :class="{ 'rotating': global.music.isPlaying && !isStaticMode, 'hidden': isStaticMode }"><span></span></div>
                 <img ref="coverImg" crossorigin="anonymous" :src="global.music.pic" :alt="global.music.name" :class="{ 'rotating': global.music.isPlaying && !isStaticMode, 'static-mode': isStaticMode }">
                 <div class="cover-center" :class="{ 'hidden': isStaticMode }"></div>
                 <div class="cover-shadow"></div>
@@ -17,9 +16,7 @@
                 <div class="progress-container">
                     <div class="cur-time">{{ formatTime(currentTime) }}</div>
                     <div class="progress-bar" @click="seekTo">
-                        <div class="progress" :style="{ width: progressPercentage + '%' }">
-                            <div class="progress-thumb"></div>
-                        </div>
+                        <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
                     </div>
                     <div class="total-time">{{ formatTime(duration) }}</div>
                 </div>
@@ -54,7 +51,7 @@
 <script setup lang='ts'>
 import { Lrc } from 'lrc-kit';
 import { useEnv } from "@/stores/env";
-import { computed, onMounted, onUnmounted, ref, watch, type FunctionalComponent } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useGlobal } from '@/stores/global';
 import { useI18n } from 'vue-i18n';
 import { formatTime, getThemeColorFromImage, setCSSVariable } from "@/utils";
@@ -81,17 +78,14 @@ const { t } = useI18n();
 const currentTime = ref(0);
 const duration = ref(0);
 const lyrics = ref<{ content: string; timestamp: number }[]>([]);
-const songChanging = ref(false);
 const currentVolume = ref(0.6);
-const isStaticMode = ref(false);
+const isStaticMode = ref(true);
 
 const emit = defineEmits(["play", "pause"]);
 
 const progressPercentage = computed(() => {
     return duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0;
 });
-
-
 
 const orderIcon = computed(() => {
     switch (global.music.order) {
@@ -134,11 +128,7 @@ const onLoadedMetadata = () => {
 }
 
 const togglePlay = () => {
-    if (audioRef.value?.paused) {
-        audioRef.value?.play();
-    } else {
-        audioRef.value?.pause();
-    }
+    audioRef.value?.paused ? audioRef.value?.play() : audioRef.value?.pause();
 }
 
 const upPause = () => {
@@ -162,10 +152,7 @@ const previousSong = () => {
             previousIndex = Math.floor(Math.random() * global.music.data.length);
             break;
         case 'single':
-            if (audioRef.value) {
-                audioRef.value.currentTime = 0;
-                audioRef.value.play();
-            }
+            audioRef.value && (audioRef.value.currentTime = 0, audioRef.value.play());
             return;
         case 'loop':
         default:
@@ -190,10 +177,7 @@ const nextSong = () => {
             nextIndex = Math.floor(Math.random() * global.music.data.length);
             break;
         case 'single':
-            if (audioRef.value) {
-                audioRef.value.currentTime = 0;
-                audioRef.value.play();
-            }
+            audioRef.value && (audioRef.value.currentTime = 0, audioRef.value.play());
             return;
         case 'loop':
         default:
@@ -208,11 +192,6 @@ const nextSong = () => {
 }
 
 const loadSong = async (song: any, autoPlay = true) => {
-    songChanging.value = true;
-    setTimeout(() => {
-        songChanging.value = false;
-    }, 300);
-
     global.music.url = song.url;
     global.music.name = song.name;
     global.music.artist = song.artist;
@@ -256,9 +235,7 @@ const seekTo = (event: MouseEvent) => {
 
     audioRef.value.currentTime = seekTime;
     currentTime.value = seekTime;
-    if (audioRef.value.paused) {
-        audioRef.value.play();
-    }
+    audioRef.value.paused && audioRef.value.play();
 }
 
 const toggleOrder = () => {
@@ -273,9 +250,7 @@ const toggleVolume = () => {
     const currentIndex = volumes.indexOf(currentVolume.value);
     const nextIndex = (currentIndex + 1) % volumes.length;
     currentVolume.value = volumes[nextIndex] || 0.3;
-    if (audioRef.value) {
-        audioRef.value.volume = currentVolume.value;
-    }
+    audioRef.value && (audioRef.value.volume = currentVolume.value);
 }
 
 const toggleCoverMode = () => {
@@ -293,9 +268,15 @@ const loadThemeColor = () => {
 watch(() => global.music.url, (newUrl, oldUrl) => {
     if (newUrl && newUrl !== oldUrl) {
         const currentSong = global.music.data.find(song => song.url === newUrl);
-        if (currentSong) {
-            loadSong(currentSong);
-        }
+        currentSong && loadSong(currentSong);
+    }
+});
+
+watch(() => global.music.isPlaying, (isPlaying) => {
+    if (isPlaying) {
+        isStaticMode.value = false;
+    } else {
+        isStaticMode.value = true;
     }
 });
 
@@ -314,9 +295,7 @@ onMounted(async () => {
             loadSong(song, false);
         }
 
-        if (audioRef.value) {
-            audioRef.value.volume = currentVolume.value;
-        }
+        audioRef.value && (audioRef.value.volume = currentVolume.value);
     } catch (error) {
         console.error('[music]', error);
     }
@@ -336,7 +315,6 @@ onUnmounted(() => {
     --play-color: rgb(200, 80, 80);
     --vinyl-black: #1a1a1a;
     --vinyl-gray: #2a2a2a;
-    --halo: #444444;
 
     width: 100%;
     max-width: 420px;
@@ -348,7 +326,6 @@ onUnmounted(() => {
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     background: color-mix(in srgb, var(--main-bg), var(--theme-dark) 68%);
     box-shadow: 0 8px 32px color-mix(in srgb, var(--theme-color) 15%, transparent);
-    overflow: visible;
 }
 
 .top {
@@ -375,9 +352,7 @@ onUnmounted(() => {
     height: 140px;
     border-radius: 50%;
     background: radial-gradient(circle at center, var(--vinyl-gray) 0%, var(--vinyl-black) 35%, var(--vinyl-gray) 55%, var(--vinyl-black) 100%);
-    box-shadow: 
-        0 8px 24px color-mix(in srgb, var(--theme-color) 25%, transparent),
-        inset 0 0 20px color-mix(in srgb, var(--halo) 5%, transparent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-color) 25%, transparent);
     z-index: 1;
     opacity: 1;
     transform: scale(1);
@@ -393,64 +368,9 @@ onUnmounted(() => {
     transform: scale(0.8);
 }
 
-.vinyl-grooves {
-    position: absolute;
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    z-index: 2;
-    pointer-events: none;
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.vinyl-grooves.rotating {
-    animation: rotate 20s linear infinite;
-}
-
-.vinyl-grooves.hidden {
-    opacity: 0;
-    transform: scale(0.8);
-}
-
-.vinyl-grooves::before,
-.vinyl-grooves::after,
-.vinyl-grooves span::before,
-.vinyl-grooves span::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--halo) 8%, transparent);
-}
-
-.vinyl-grooves::before {
-    width: 120px;
-    height: 120px;
-}
-
-.vinyl-grooves::after {
-    width: 100px;
-    height: 100px;
-}
-
-.vinyl-grooves span::before {
-    width: 80px;
-    height: 80px;
-}
-
-.vinyl-grooves span::after {
-    width: 60px;
-    height: 60px;
-}
-
 .cover-container img {
     width: 60px;
     height: 60px;
-    aspect-ratio: 1/1;
     border-radius: 50%;
     object-fit: cover;
     z-index: 4;
@@ -470,8 +390,7 @@ onUnmounted(() => {
     width: 100%;
     height: 100%;
     border-radius: 16px;
-    box-shadow: 
-        0 8px 24px color-mix(in srgb, var(--theme-color) 30%, transparent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-color) 30%, transparent);
 }
 
 .cover-center {
@@ -481,9 +400,6 @@ onUnmounted(() => {
     border-radius: 50%;
     background: var(--vinyl-black);
     z-index: 5;
-    box-shadow: 
-        inset 0 0 0 2px color-mix(in srgb, var(--halo) 50%, transparent),
-        0 0 0 1px var(--vinyl-gray);
     opacity: 1;
     transform: scale(1);
     transition: opacity 0.4s ease, transform 0.4s ease;
@@ -508,7 +424,6 @@ onUnmounted(() => {
 .info-container {
     flex: 1;
     display: flex;
-    overflow: hidden;
     flex-direction: column;
     gap: 0.75rem;
     min-width: 0;
@@ -518,45 +433,40 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+}
 
-    &>div {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.name-artist > div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+}
 
-    .name {
-        font-weight: bold;
-        font-size: 1.15rem;
-        color: var(--text-color);
-        transition: color 0.3s ease;
-    }
+.name-artist .name {
+    font-weight: bold;
+    font-size: 1.15rem;
+}
 
-    .artist {
-        font-size: 0.9rem;
-        opacity: 0.7;
-        color: var(--text-color);
-    }
+.name-artist .artist {
+    font-size: 0.9rem;
+    opacity: 0.7;
 }
 
 .cur-lyric {
     font-size: 0.85rem;
     white-space: nowrap;
-    overflow-x: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
     min-height: 1.25rem;
     opacity: 0.85;
     color: var(--text-color);
-    transition: opacity 0.3s ease;
 }
 
 .progress-container {
     display: flex;
     gap: 0.5rem;
     font-size: 0.8rem;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
 }
 
 .progress-bar {
@@ -564,15 +474,13 @@ onUnmounted(() => {
     height: 6px;
     background: var(--theme-dark);
     border-radius: 3px;
-    position: relative;
     cursor: pointer;
+}
 
-    .progress {
-        height: 100%;
-        background: linear-gradient(90deg, var(--theme-color), color-mix(in srgb, var(--text-color), var(--theme-color) 68%));
-        border-radius: 3px;
-        position: relative;
-    }
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--theme-color), color-mix(in srgb, var(--text-color), var(--theme-color) 68%));
+    border-radius: 3px;
 }
 
 .cur-time,
@@ -582,7 +490,6 @@ onUnmounted(() => {
     text-align: center;
     color: var(--text-color);
     opacity: 0.8;
-    font-family: 'Electrolize', sans-serif;
 }
 
 .bottom {
@@ -608,47 +515,23 @@ onUnmounted(() => {
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
-    position: relative;
-    background: transparent;
+}
 
-    &:active {
-        transform: scale(0.95);
-    }
+.control.play {
+    width: 56px;
+    height: 56px;
+    background: var(--theme-light);
+    border: 2px solid var(--theme-color);
+}
 
-    &.play {
-        width: 56px;
-        height: 56px;
-        background: var(--theme-light);
-        border: 2px solid var(--theme-color);
-
-        .icon {
-            width: 26px;
-            height: 26px;
-            color: var(--play-color);
-        }
-
-        &.playing .icon {
-            animation: pulse-icon 1.5s ease-in-out infinite;
-        }
-    }
+.control.play .icon {
+    width: 26px;
+    height: 26px;
+    color: var(--play-color);
 }
 
 @keyframes rotate {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes pulse-icon {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.08);
-    }
+    to { transform: rotate(360deg); }
 }
 
 @media screen and (max-width: 768px) {
@@ -667,41 +550,14 @@ onUnmounted(() => {
         height: 95px;
     }
 
-    .vinyl-disc,
-    .vinyl-grooves {
+    .vinyl-disc {
         width: 120px;
         height: 120px;
-    }
-
-    .vinyl-grooves::before {
-        width: 105px;
-        height: 105px;
-    }
-
-    .vinyl-grooves::after {
-        width: 90px;
-        height: 90px;
-    }
-
-    .vinyl-grooves span::before {
-        width: 75px;
-        height: 75px;
-    }
-
-    .vinyl-grooves span::after {
-        width: 60px;
-        height: 60px;
     }
 
     .cover-container img {
         width: 52px;
         height: 52px;
-    }
-
-    .cover-container img.static-mode {
-        width: 100%;
-        height: 100%;
-        border-radius: 14px;
     }
 
     .cover-center {
@@ -714,14 +570,12 @@ onUnmounted(() => {
         height: 110px;
     }
 
-    .name-artist {
-        .name {
-            font-size: 1.05rem;
-        }
+    .name-artist .name {
+        font-size: 1.05rem;
+    }
 
-        .artist {
-            font-size: 0.85rem;
-        }
+    .name-artist .artist {
+        font-size: 0.85rem;
     }
 
     .cur-lyric {
@@ -739,16 +593,16 @@ onUnmounted(() => {
     .control {
         width: 38px;
         height: 38px;
+    }
 
-        &.play {
-            width: 50px;
-            height: 50px;
+    .control.play {
+        width: 50px;
+        height: 50px;
+    }
 
-            .icon {
-                width: 22px;
-                height: 22px;
-            }
-        }
+    .control.play .icon {
+        width: 22px;
+        height: 22px;
     }
 }
 
@@ -756,7 +610,6 @@ onUnmounted(() => {
     .player {
         padding: 0.875rem;
         border-radius: 18px;
-        position: relative;
     }
 
     .top {
@@ -771,41 +624,14 @@ onUnmounted(() => {
         margin-top: -40px;
     }
 
-    .vinyl-disc,
-    .vinyl-grooves {
+    .vinyl-disc {
         width: 160px;
         height: 160px;
-    }
-
-    .vinyl-grooves::before {
-        width: 140px;
-        height: 140px;
-    }
-
-    .vinyl-grooves::after {
-        width: 120px;
-        height: 120px;
-    }
-
-    .vinyl-grooves span::before {
-        width: 100px;
-        height: 100px;
-    }
-
-    .vinyl-grooves span::after {
-        width: 80px;
-        height: 80px;
     }
 
     .cover-container img {
         width: 70px;
         height: 70px;
-    }
-
-    .cover-container img.static-mode {
-        width: 100%;
-        height: 100%;
-        border-radius: 16px;
     }
 
     .cover-center {
