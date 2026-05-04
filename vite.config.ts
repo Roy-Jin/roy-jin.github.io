@@ -11,15 +11,13 @@ export default defineConfig({
   plugins: [
     VueRouter(),
     vue(),
-    vueDevTools(),
+    // vueDevTools(),
     tailwindcss()
   ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
       "@styles": fileURLToPath(new URL("./src/assets/styles", import.meta.url)),
-      "@stores": fileURLToPath(new URL("./src/stores", import.meta.url)),
     },
   },
 });

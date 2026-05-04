@@ -13,20 +13,10 @@
                 <MusicPlayer class="cursor-target" />
                 <hr>
                 <div class="switcher-container">
-                    <Switcher 
-                        class="cursor-target"
-                        :icon="themeIcon"
-                        :label="$t('theme.name')"
-                        :value="themeValue"
-                        @click="toggleTheme"
-                    />
-                    <Switcher 
-                        class="cursor-target"
-                        :icon="Languages"
-                        :label="$t('lang.name')"
-                        :value="$t(`lang.${global.lang}`)"
-                        @click="toggleLang"
-                    />
+                    <Switcher class="cursor-target" :icon="themeIcon" :label="$t('theme.name')" :value="themeValue"
+                        @click="toggleTheme" />
+                    <Switcher class="cursor-target" :icon="Languages" :label="$t('lang.name')"
+                        :value="$t(`lang.${global.lang}`)" @click="toggleLang" />
                 </div>
                 <hr>
                 <div class="footer">{{ useEnv().copyright }}</div>
@@ -41,9 +31,8 @@ import { useGlobal } from '@/stores/global';
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Sun, Moon, Languages } from 'lucide-vue-next';
-import Scrollable from './Scrollable.vue';
-import MusicPlayer from '@/components/MusicPlayer.vue';
-import Switcher from './Switcher.vue';
+import Scrollable from '@/components/Scrollable.vue';
+import { Switcher, MusicPlayer } from '@/components/Menu';
 
 const props = defineProps<{
     top: number
@@ -167,6 +156,7 @@ defineExpose({
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 0.86;
         transform: translateY(0);

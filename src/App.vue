@@ -12,7 +12,7 @@ import { ref, provide, onMounted, computed, defineAsyncComponent } from 'vue'
 import { useGlobal } from './stores/global'
 import { setDocumentTheme } from '@/utils'
 const TargetCursor = defineAsyncComponent(() => import('@/components/Cursor.vue'));
-const Header = defineAsyncComponent(() => import('@/components/Header.vue'))
+const Header = defineAsyncComponent(() => import('@/layout/Header.vue'))
 
 const headerRef = ref<InstanceType<typeof Header> | null>(null)
 const global = useGlobal()

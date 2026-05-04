@@ -27,7 +27,7 @@
 <script setup lang='ts'>
 import { ref, onMounted, onUnmounted } from 'vue';
 import dayjs from 'dayjs';
-import Counter from '../Counter.vue';
+import { Counter } from '@/components/Today';
 import { useI18n } from 'vue-i18n';
 import { useGlobal } from '@/stores/global';
 

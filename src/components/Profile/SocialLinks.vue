@@ -1,7 +1,7 @@
 <template>
     <div class="social-links">
         <div v-for="link in socialLinks" :key="link.name" @click="handleClick(link.href)"
-            class="link cursor-target">
+            :style="{ '--link-color': link.color }" class="link cursor-target">
             <Icon :icon="link.icon" :fill="link.color" />
         </div>
     </div>
@@ -53,7 +53,7 @@ const handleClick = (url: string) => {
     align-items: center;
     text-decoration: none;
     justify-content: center;
-    background-color: var(--theme-color-light);
+    background-color: color-mix(in srgb, var(--link-color) 20%, transparent);
     color: color-mix(in srgb, var(--theme-color) 85%, transparent);
 }
 </style>

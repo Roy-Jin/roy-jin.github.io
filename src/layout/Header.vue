@@ -29,7 +29,7 @@ import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref }
 import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
 import { MenuIcon, XIcon, Disc3Icon } from 'lucide-vue-next';
-const Menu = defineAsyncComponent(() => import('@/components/Menu.vue'));
+const Menu = defineAsyncComponent(() => import('@/layout/Menu.vue'));
 
 const env = useEnv();
 const global = useGlobal();

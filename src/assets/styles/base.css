@@ -30,22 +30,22 @@
 
 @font-face {
     font-family: "仓耳逍遥行书";
-    src: url("@/assets/fonts/仓耳逍遥行书.ttf");
+    src: url("/fonts/仓耳逍遥行书.ttf");
 }
 
 @font-face {
     font-family: "仓耳渔阳体";
-    src: url("../fonts/仓耳渔阳体W03.woff2");
+    src: url("/fonts/仓耳渔阳体W03.woff2");
 }
 
 @font-face {
     font-family: "Playball";
-    src: url("../fonts/Playball-Regular.woff2");
+    src: url("/fonts/Playball-Regular.woff2");
 }
 
 @font-face {
     font-family: "Electrolize";
-    src: url("../fonts/Electrolize-Regular.woff2");
+    src: url("/fonts/Electrolize-Regular.woff2");
 }
 
 * {

@@ -11,9 +11,7 @@
 </template>
 
 <script setup lang='ts'>
-import Avatar from '../ui/Avatar.vue';
-import Quote from '../ui/Quote.vue';
-import SocialLinks from '../ui/SocialLinks.vue';
+import { Avatar, Quote, SocialLinks } from '@/components/Profile';
 import { useEnv } from '@/stores/env';
 import { useI18n } from 'vue-i18n';
 

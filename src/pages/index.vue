@@ -1,11 +1,11 @@
 <template>
     <Scrollable ref="scrollRef">
         <div class="wrapper">
-            <ProfileSection @link-click="openLink" />
+            <Profile @link-click="openLink" />
             <div class="content">
-                <TodaySection />
+                <Today />
                 <div id="projects">
-                    <RepoCard v-for="repo in filteredRepos" :key="repo.html_url" :repo="repo" @click="openLink" />
+                    <Repo v-for="repo in filteredRepos" :key="repo.html_url" :repo="repo" @click="openLink" />
                 </div>
             </div>
         </div>
@@ -18,12 +18,12 @@ import { useI18n } from 'vue-i18n';
 import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
 import { filterRepos } from '@/utils';
-import { 
-    Scrollable, 
-    ProfileSection, 
-    TodaySection, 
-    RepoCard 
-} from '@/components';
+import {
+    Profile,
+    Today,
+    Repo
+} from '@/layout';
+import Scrollable from '@/components/Scrollable.vue';
 import { showConfirmDialog } from 'vant';
 import 'vant/es/dialog/style';
 
@@ -45,7 +45,7 @@ const openLink = (path: string) => {
         closeOnClickOverlay: true
     }).then(() => {
         window.open(path, '_blank');
-    }).catch(() => {});
+    }).catch(() => { });
 };
 
 onMounted(async () => {
@@ -91,7 +91,7 @@ onMounted(async () => {
         flex-direction: column;
         height: unset;
     }
-    
+
     .content {
         width: 80%;
         margin-bottom: 1rem;
