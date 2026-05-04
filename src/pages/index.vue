@@ -10,8 +10,15 @@
                                 <circle cx="100" cy="100" r="100" />
                             </clipPath>
                         </defs>
-                        <image x="0" y="0" width="100%" height="100%" clip-path="url(#circleClip)" id="avatarImage"
-                            :xlink:href="env.avatar[0]" />
+                        <foreignObject x="0" y="0" width="200" height="200" clip-path="url(#circleClip)">
+                            <div xmlns="http://www.w3.org/1999/xhtml" style="position: relative; width: 200px; height: 200px;">
+                                <img :src="env.avatar[0]" style="width: 200px; height: 200px; object-fit: cover;" />
+                                <video width="200" height="200" autoplay loop muted playsinline disablepictureinpicture disableremoteplayback style="width: 200px; height: 200px; position: absolute; top: 0; left: 0; object-fit: cover;" controlslist="nodownload nofullscreen noremoteplayback">
+                                    <source :src="env.avatar_video" type="video/webm" />
+                                </video>
+                                <div style="position: absolute; top: 0; left: 0; width: 200px; height: 200px; pointer-events: none;"></div>
+                            </div>
+                        </foreignObject>
                     </svg>
                     <h4 id="name">{{ env.name }}</h4>
                     <div id="subtitle-text">{{ $t("subtitle") }}</div>
@@ -63,7 +70,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, defineAsyncComponent, onMounted, onUnmounted, ref } from 'vue';
+import { computed, defineAsyncComponent, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import Scrollable from '@/components/Scrollable.vue';
 import dayjs from 'dayjs';
 import { useI18n } from "vue-i18n";

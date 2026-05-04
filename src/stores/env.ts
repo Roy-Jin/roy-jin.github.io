@@ -9,9 +9,10 @@ export const useEnv = defineStore("env", {
             "MyIndex",
         ],
         avatar: [
-            "/avatar.png",
-            "/avatar-nobg.png",
+            "/avatar.webp",
+            "/avatar-nobg.webp",
         ],
+        avatar_video: "/avatar.webm",
         social: [
             {
                 name: "GitHub",
