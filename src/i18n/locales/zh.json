@@ -3,7 +3,7 @@
     "loading": "加载中...",
     "openLink": {
       "title": "打开链接？",
-      "message": "你确定要打开这个链接吗？"
+      "message": "你确定要打开这个吗？"
     }
   },
   "subtitle": "嗨，欢迎来到我的个人网站！",
@@ -27,5 +27,8 @@
     "name": "语言",
     "zh": "中文",
     "en": "English"
+  },
+  "menu": {
+    "title": "控制栏"
   }
 }

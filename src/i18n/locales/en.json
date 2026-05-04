@@ -3,7 +3,7 @@
     "loading": "加载中...",
     "openLink": {
       "title": "Open this link?",
-      "message": "Are you sure you want to open this link?"
+      "message": "You sure you wanna open this?"
     }
   },
   "subtitle": "Hi, welcome to my personal website!",
@@ -27,5 +27,8 @@
     "name": "Lang",
     "zh": "中文",
     "en": "English"
+  },
+  "menu": {
+    "title": "Menu"
   }
 }

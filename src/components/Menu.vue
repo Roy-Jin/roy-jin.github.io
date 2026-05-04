@@ -8,7 +8,7 @@
         <Scrollable class="content-wrapper">
             <div class="content">
                 <div class="title">
-                    <span>{{ useEnv().title[1] }}</span>
+                    <span>{{ t('menu.title') }}</span>
                 </div>
                 <MusicPlayer class="cursor-target" />
                 <hr>
