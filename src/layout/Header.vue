@@ -136,7 +136,6 @@ defineExpose({
 
 .musicInfo {
     max-width: 10rem;
-    font-family: "仓耳渔阳体";
     overflow: hidden;
     margin-right: 0.5rem;
     font-size: small;

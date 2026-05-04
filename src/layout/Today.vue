@@ -111,10 +111,6 @@ onUnmounted(() => {
     background: linear-gradient(to right, var(--theme-color), transparent 64%);
 }
 
-#sayings {
-    font-family: "仓耳渔阳体";
-}
-
 #sayings>.text {
     font-weight: bold;
 }

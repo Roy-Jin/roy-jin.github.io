@@ -322,7 +322,6 @@ onUnmounted(() => {
     padding: 1.25rem;
     border-radius: 24px;
     flex-direction: column;
-    font-family: "仓耳渔阳体";
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     background: color-mix(in srgb, var(--main-bg), var(--theme-dark) 68%);
     box-shadow: 0 8px 32px color-mix(in srgb, var(--theme-color) 15%, transparent);

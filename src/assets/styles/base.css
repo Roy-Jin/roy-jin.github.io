@@ -72,7 +72,7 @@ body {
     width: 100dvw;
     height: 100dvh;
     overflow: hidden;
-    font-family: "Playball", "仓耳渔阳体";
+    font-family: "仓耳渔阳体";
     color: var(--text-color);
     background-color: var(--main-bg);
 }

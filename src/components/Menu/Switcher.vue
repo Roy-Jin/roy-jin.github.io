@@ -135,7 +135,6 @@ const handleClick = (event: MouseEvent) => {
             font-size: 1.2rem;
             font-weight: bold;
             color: var(--text-color);
-            font-family: "仓耳渔阳体";
         }
     }
 

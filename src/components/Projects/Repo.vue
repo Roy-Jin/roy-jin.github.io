@@ -131,6 +131,7 @@ const formatDate = (dateString: string) => {
     font-size: 0.9rem;
     opacity: 0.8;
     line-height: 1.5;
+    font-family: "仓耳渔阳体";
 }
 
 .project-footer {
