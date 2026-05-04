@@ -85,3 +85,11 @@ body {
 ::view-transition-new(root) {
     animation: none;
 }
+
+::view-transition-old(root) {
+    opacity: 0.8;
+}
+
+::view-transition-new(root) {
+    background: var(--theme-color);
+}

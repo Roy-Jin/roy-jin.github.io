@@ -84,8 +84,8 @@ export const useGlobal = defineStore("global", {
               clipPath: clipPath,
             },
             {
-              duration: 800,
-              easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+              duration: 500,
+              easing: "cubic-bezier(0.2, 0, 0.6, 0.4)",
               pseudoElement: "::view-transition-new(root)",
             },
           );
@@ -95,9 +95,47 @@ export const useGlobal = defineStore("global", {
       }
     },
 
-    toggleLang(lang?: string) {
-      this.lang = lang ? lang : this.lang === "zh" ? "en" : "zh";
-      setI18nLanguage(this.lang);
+    toggleLang(lang?: string, event?: { clientX: number; clientY: number }) {
+      const newLang = lang ? lang : this.lang === "zh" ? "en" : "zh";
+
+      const toggleLangAction = () => {
+        this.lang = newLang;
+        setI18nLanguage(this.lang);
+      };
+
+      if (document.startViewTransition && event) {
+        const x = event.clientX;
+        const y = event.clientY;
+
+        const endRadius = Math.hypot(
+          Math.max(x, window.innerWidth - x),
+          Math.max(y, window.innerHeight - y),
+        );
+
+        const transition = document.startViewTransition(() => {
+          toggleLangAction();
+        });
+
+        transition.ready.then(() => {
+          const clipPath = [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`,
+          ];
+
+          document.documentElement.animate(
+            {
+              clipPath: clipPath,
+            },
+            {
+              duration: 500,
+              easing: "cubic-bezier(0.2, 0, 0.6, 0.4)",
+              pseudoElement: "::view-transition-new(root)",
+            },
+          );
+        });
+      } else {
+        toggleLangAction();
+      }
     },
 
     initLang() {

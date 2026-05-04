@@ -65,8 +65,8 @@ const toggleTheme = (event: MouseEvent) => {
     global.toggleTheme({ clientX: event.clientX, clientY: event.clientY });
 };
 
-const toggleLang = () => {
-    global.toggleLang();
+const toggleLang = (event: MouseEvent) => {
+    global.toggleLang(undefined, { clientX: event.clientX, clientY: event.clientY });
 };
 
 const closeMenu = () => {
