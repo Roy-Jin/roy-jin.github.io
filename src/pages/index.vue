@@ -96,7 +96,7 @@ const socialLinks = computed(() => {
 const openLink = (path: string) => {
     showConfirmDialog({
         title: t('tips.openLink.title'),
-        message: t('tips.openLink.message'),
+        message: `${t('tips.openLink.message')}\n\n${path}`,
         cancelButtonColor: "color-mix(in srgb, grey 60%, transparent)",
         confirmButtonColor: "var(--theme-color)",
         closeOnClickOverlay: true

@@ -1,10 +1,14 @@
 <template>
     <div class="player" ref="Player">
         <div class="top">
-            <div class="top-left">
-                <img ref="coverImg" crossorigin="anonymous" :src="global.music.pic" :alt="global.music.name">
+            <div class="cover-container" @click="toggleCoverMode">
+                <div class="vinyl-disc" :class="{ 'rotating': global.music.isPlaying && !isStaticMode, 'hidden': isStaticMode }"></div>
+                <div class="vinyl-grooves" :class="{ 'rotating': global.music.isPlaying && !isStaticMode, 'hidden': isStaticMode }"><span></span></div>
+                <img ref="coverImg" crossorigin="anonymous" :src="global.music.pic" :alt="global.music.name" :class="{ 'rotating': global.music.isPlaying && !isStaticMode, 'static-mode': isStaticMode }">
+                <div class="cover-center" :class="{ 'hidden': isStaticMode }"></div>
+                <div class="cover-shadow"></div>
             </div>
-            <div class="top-right">
+            <div class="info-container">
                 <div class="name-artist">
                     <div class="name">{{ global.music.name }}</div>
                     <div class="artist">{{ global.music.artist }}</div>
@@ -13,7 +17,9 @@
                 <div class="progress-container">
                     <div class="cur-time">{{ formatTime(currentTime) }}</div>
                     <div class="progress-bar" @click="seekTo">
-                        <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
+                        <div class="progress" :style="{ width: progressPercentage + '%' }">
+                            <div class="progress-thumb"></div>
+                        </div>
                     </div>
                     <div class="total-time">{{ formatTime(duration) }}</div>
                 </div>
@@ -21,9 +27,21 @@
         </div>
         <div class="bottom">
             <div class="controls">
-                <div v-for="control in controls" :key="control.type" :class="['control', control.type]"
-                    @click="control.onClicked">
-                    <component :is="control.comp" :color="control.color" :fill="control.fill ?? 'transparent'" />
+                <div class="control order" @click="toggleOrder">
+                    <component :is="orderIcon" color="var(--text-color)" />
+                </div>
+                <div class="control prev" @click="previousSong">
+                    <SkipBack color="var(--text-color)" />
+                </div>
+                <div class="control play" :class="{ 'playing': global.music.isPlaying }" @click="togglePlay">
+                    <Play v-if="!global.music.isPlaying" class="icon" :fill="'var(--play-color)'" />
+                    <Pause v-else class="icon" :fill="'var(--play-color)'" />
+                </div>
+                <div class="control next" @click="nextSong">
+                    <SkipForward color="var(--text-color)" />
+                </div>
+                <div class="control volume" @click="toggleVolume">
+                    <component :is="volumeIcon" color="var(--text-color)" />
                 </div>
             </div>
         </div>
@@ -60,53 +78,35 @@ const coverImg = ref<HTMLImageElement>();
 const audioRef = ref<HTMLAudioElement | null>(null);
 const { t } = useI18n();
 
-// 响应式数据
 const currentTime = ref(0);
 const duration = ref(0);
 const lyrics = ref<{ content: string; timestamp: number }[]>([]);
+const songChanging = ref(false);
+const currentVolume = ref(0.6);
+const isStaticMode = ref(false);
 
 const emit = defineEmits(["play", "pause"]);
 
-// 计算属性
 const progressPercentage = computed(() => {
     return duration.value > 0 ? (currentTime.value / duration.value) * 100 : 0;
 });
 
-const controls = ref([
-    {
-        type: "order",
-        comp: Shuffle,
-        color: "var(--text-color)",
-        onClicked: () => { toggleOrder(); }
-    },
-    {
-        type: "prev",
-        comp: SkipBack,
-        color: "var(--text-color)",
-        onClicked: () => { previousSong(); }
-    },
-    {
-        type: "play",
-        comp: Play,
-        color: "var(--play-color)",
-        fill: "var(--play-color)",
-        onClicked: () => { togglePlay(); }
-    },
-    {
-        type: "next",
-        comp: SkipForward,
-        color: "var(--text-color)",
-        onClicked: () => { nextSong(); }
-    },
-    {
-        type: "volume",
-        comp: Volume1,
-        color: "var(--text-color)",
-        onClicked: () => { toggleVolume(); }
-    }
-]);
 
-// 解析歌词
+
+const orderIcon = computed(() => {
+    switch (global.music.order) {
+        case 'random': return Shuffle;
+        case 'single': return Repeat1;
+        default: return Repeat;
+    }
+});
+
+const volumeIcon = computed(() => {
+    if (currentVolume.value === 0.3) return Volume;
+    if (currentVolume.value === 0.6) return Volume1;
+    return Volume2;
+});
+
 const parseLrcUrl = async (url: string): Promise<{ content: string; timestamp: number }[]> => {
     try {
         const response = await fetch(url);
@@ -119,7 +119,6 @@ const parseLrcUrl = async (url: string): Promise<{ content: string; timestamp: n
     }
 }
 
-// 更新进度条
 const updateProgress = () => {
     if (audioRef.value) {
         currentTime.value = audioRef.value.currentTime;
@@ -127,7 +126,6 @@ const updateProgress = () => {
     }
 }
 
-// 音频元数据加载完成
 const onLoadedMetadata = () => {
     if (audioRef.value) {
         duration.value = audioRef.value.duration;
@@ -135,7 +133,6 @@ const onLoadedMetadata = () => {
     }
 }
 
-// 切换播放/暂停
 const togglePlay = () => {
     if (audioRef.value?.paused) {
         audioRef.value?.play();
@@ -145,20 +142,15 @@ const togglePlay = () => {
 }
 
 const upPause = () => {
-    emit("pause")
-    const _ = controls.value.find(control => control.type === 'play');
-    if (_) _.comp = Play;
+    emit("pause");
     global.music.isPlaying = false;
 }
 
 const upPlay = () => {
-    emit("play")
-    const _ = controls.value.find(control => control.type === 'play');
-    if (_) _.comp = Pause;
+    emit("play");
     global.music.isPlaying = true;
 }
 
-// 上一首
 const previousSong = () => {
     if (global.music.data.length === 0) return;
 
@@ -187,7 +179,6 @@ const previousSong = () => {
     loadSong(global.music.data[previousIndex]);
 }
 
-// 下一首
 const nextSong = () => {
     if (global.music.data.length === 0) return;
 
@@ -216,29 +207,28 @@ const nextSong = () => {
     loadSong(global.music.data[nextIndex]);
 }
 
-// 加载歌曲
 const loadSong = async (song: any, autoPlay = true) => {
+    songChanging.value = true;
+    setTimeout(() => {
+        songChanging.value = false;
+    }, 300);
+
     global.music.url = song.url;
     global.music.name = song.name;
     global.music.artist = song.artist;
     global.music.pic = song.pic;
     global.music.lrc = song.lrc;
 
-    // 加载歌词
     lyrics.value = await parseLrcUrl(song.lrc);
-
-    // 重置播放状态
     currentTime.value = 0;
     global.music.curLrc = lyrics.value[0]?.content as string;
 
-    // 重新加载音频
     if (audioRef.value) {
         audioRef.value.load();
-        autoPlay && setTimeout(() => audioRef.value?.play(), 100);
+        autoPlay && setTimeout(() => audioRef.value?.play(), 200);
     }
 }
 
-// 更新当前歌词
 const updateCurrentLyric = () => {
     if (lyrics.value.length === 0) return;
 
@@ -256,7 +246,6 @@ const updateCurrentLyric = () => {
     global.music.curLrc = lyrics.value[currentLyricIndex]?.content as string;
 }
 
-// 格式化时间
 const formatTime = (time: number) => {
     if (isNaN(time)) return '00:00';
 
@@ -265,7 +254,6 @@ const formatTime = (time: number) => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// 点击进度条跳转
 const seekTo = (event: MouseEvent) => {
     if (!audioRef.value || duration.value === 0) return;
 
@@ -281,30 +269,25 @@ const seekTo = (event: MouseEvent) => {
     }
 }
 
-// 切换播放顺序
 const toggleOrder = () => {
-    const _ = controls.value.find(control => control.type === 'order');
-    if (_) {
-        const orders = ['random', 'loop', 'single'];
-        const orderIcons = [Shuffle, Repeat, Repeat1];
-        const currentIndex = orders.indexOf(global.music.order);
-        const nextIndex = (currentIndex + 1) % orders.length;
-        global.music.order = orders[nextIndex] as string;
-        _.comp = orderIcons[nextIndex] as FunctionalComponent;
+    const orders = ['random', 'loop', 'single'];
+    const currentIndex = orders.indexOf(global.music.order);
+    const nextIndex = (currentIndex + 1) % orders.length;
+    global.music.order = orders[nextIndex] as string;
+}
+
+const toggleVolume = () => {
+    const volumes = [0.3, 0.6, 1];
+    const currentIndex = volumes.indexOf(currentVolume.value);
+    const nextIndex = (currentIndex + 1) % volumes.length;
+    currentVolume.value = volumes[nextIndex] || 0.3;
+    if (audioRef.value) {
+        audioRef.value.volume = currentVolume.value;
     }
 }
 
-// 切换音量
-const toggleVolume = () => {
-    const _ = controls.value.find(control => control.type === 'volume');
-    if (audioRef.value && _) {
-        const volumes = [0.3, 0.6, 1]
-        const volumeIcons = [Volume, Volume1, Volume2]
-        const currentIndex = volumes.indexOf(audioRef.value.volume);
-        const nextIndex = (currentIndex + 1) % volumes.length;
-        audioRef.value.volume = volumes[nextIndex] as number;
-        _.comp = volumeIcons[nextIndex] as FunctionalComponent;
-    }
+const toggleCoverMode = () => {
+    isStaticMode.value = !isStaticMode.value;
 }
 
 const loadThemeColor = () => {
@@ -315,7 +298,6 @@ const loadThemeColor = () => {
     }
 }
 
-// 监听当前歌曲变化
 watch(() => global.music.url, (newUrl, oldUrl) => {
     if (newUrl && newUrl !== oldUrl) {
         const currentSong = global.music.data.find(song => song.url === newUrl);
@@ -340,15 +322,8 @@ onMounted(async () => {
             loadSong(song, false);
         }
 
-        const _order = controls.value.find(control => control.type === 'order');
-        if (_order) {
-            const orderIcons = [Shuffle, Repeat, Repeat1];
-            const orderIndex = ['random', 'loop', 'single'].indexOf(global.music.order);
-            _order.comp = orderIcons[orderIndex] as FunctionalComponent;
-        }
-
         if (audioRef.value) {
-            audioRef.value.volume = 0.6; // 0.3 / 0.6 / 1
+            audioRef.value.volume = currentVolume.value;
         }
     } catch (error) {
         console.error('[music]', error);
@@ -366,135 +341,508 @@ onUnmounted(() => {
     --theme: var(--theme-color);
     --theme-light: color-mix(in srgb, var(--theme) 20%, transparent);
     --theme-dark: color-mix(in srgb, var(--theme) 60%, transparent);
-
     --play-color: rgb(200, 80, 80);
+    --vinyl-black: #1a1a1a;
+    --vinyl-gray: #2a2a2a;
 
-    width: 80%;
+    width: 100%;
+    max-width: 420px;
     display: flex;
-    padding: 1rem;
-    max-width: 400px;
-    border-radius: 20px;
+    padding: 1.25rem;
+    border-radius: 24px;
     flex-direction: column;
     font-family: "仓耳渔阳体";
-    transition: var(--transition);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     background: color-mix(in srgb, var(--main-bg), var(--theme-dark) 68%);
+    box-shadow: 0 8px 32px color-mix(in srgb, var(--theme-color) 15%, transparent);
+    overflow: visible;
 }
 
 .top {
-    gap: 1rem;
+    gap: 1.75rem;
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
-.top-left {
+.cover-container {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100px;
-    height: 100px;
-
-    img {
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 1/1;
-        border-radius: 1rem;
-        object-fit: cover;
-    }
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+    cursor: pointer;
 }
 
-.top-right {
+.vinyl-disc {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, var(--vinyl-gray) 0%, var(--vinyl-black) 35%, var(--vinyl-gray) 55%, var(--vinyl-black) 100%);
+    box-shadow: 
+        0 8px 24px color-mix(in srgb, var(--theme-color) 25%, transparent),
+        inset 0 0 20px color-mix(in srgb, var(--text-color) 5%, transparent);
+    z-index: 1;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.vinyl-disc.rotating {
+    animation: rotate 20s linear infinite;
+}
+
+.vinyl-disc.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.vinyl-grooves {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.vinyl-grooves.rotating {
+    animation: rotate 20s linear infinite;
+}
+
+.vinyl-grooves.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.vinyl-grooves::before,
+.vinyl-grooves::after,
+.vinyl-grooves span::before,
+.vinyl-grooves span::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+
+.vinyl-grooves::before {
+    width: 120px;
+    height: 120px;
+}
+
+.vinyl-grooves::after {
+    width: 100px;
+    height: 100px;
+}
+
+.vinyl-grooves span::before {
+    width: 80px;
+    height: 80px;
+}
+
+.vinyl-grooves span::after {
+    width: 60px;
+    height: 60px;
+}
+
+.cover-container img {
+    width: 60px;
+    height: 60px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 4;
+    position: relative;
+    box-shadow: 
+        0 0 0 4px var(--vinyl-gray),
+        0 0 0 6px var(--vinyl-black),
+        0 4px 12px color-mix(in srgb, var(--theme-color) 20%, transparent);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.cover-container img.rotating {
+    animation: rotate 20s linear infinite;
+}
+
+.cover-container img.static-mode {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: 
+        0 8px 24px color-mix(in srgb, var(--theme-color) 30%, transparent);
+}
+
+.cover-center {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--main-bg);
+    z-index: 5;
+    box-shadow: 
+        inset 0 0 0 2px color-mix(in srgb, var(--text-color) 15%, transparent),
+        0 0 0 1px var(--vinyl-gray);
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.cover-center.hidden {
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.cover-shadow {
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: var(--theme-color);
+    filter: blur(28px);
+    opacity: 0.3;
+    z-index: 0;
+}
+
+.info-container {
     flex: 1;
     display: flex;
     overflow: hidden;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.75rem;
+    min-width: 0;
+}
 
-    .name-artist {
-        &>div {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.name-artist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 
-        .name {
-            font-weight: bolder;
-            font-size: large;
-            font-weight: bold;
-        }
-
-        .artist {
-            font-size: small;
-            opacity: 0.8;
-        }
-    }
-
-    .cur-lyric {
-        font-size: small;
+    &>div {
         white-space: nowrap;
-        overflow-x: hidden;
+        overflow: hidden;
         text-overflow: ellipsis;
-        min-height: 1.2rem;
     }
 
-    .progress-container {
-        flex: 1;
-        gap: .3rem;
-        display: flex;
-        font-size: smaller;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-
-        .progress-bar {
-            flex: 1;
-            height: 5px;
-            background: var(--theme-dark);
-            border-radius: 2.5px;
-            position: relative;
-
-            .progress {
-                height: 100%;
-                background: color-mix(in srgb, var(--text-color), var(--theme) 68%);
-                border-radius: 2.5px;
-                transition: width 0.1s ease;
-            }
-        }
-
-        .cur-time,
-        .total-time {
-            font-size: x-small;
-            min-width: 40px;
-            text-align: center;
-        }
+    .name {
+        font-weight: bold;
+        font-size: 1.15rem;
+        color: var(--text-color);
+        transition: color 0.3s ease;
     }
+
+    .artist {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        color: var(--text-color);
+    }
+}
+
+.cur-lyric {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    min-height: 1.25rem;
+    opacity: 0.85;
+    color: var(--text-color);
+    transition: opacity 0.3s ease;
+}
+
+.progress-container {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--theme-dark);
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+
+    .progress {
+        height: 100%;
+        background: linear-gradient(90deg, var(--theme-color), color-mix(in srgb, var(--text-color), var(--theme-color) 68%));
+        border-radius: 3px;
+        position: relative;
+    }
+}
+
+.cur-time,
+.total-time {
+    font-size: 0.75rem;
+    min-width: 42px;
+    text-align: center;
+    color: var(--text-color);
+    opacity: 0.8;
+    font-family: 'Electrolize', sans-serif;
 }
 
 .bottom {
     display: flex;
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: 1.25rem;
+}
+
+.controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+}
+
+.control {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    background: transparent;
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    &.play {
+        width: 56px;
+        height: 56px;
+        background: var(--theme-light);
+        border: 2px solid var(--theme-color);
+
+        .icon {
+            width: 26px;
+            height: 26px;
+            color: var(--play-color);
+        }
+
+        &.playing .icon {
+            animation: pulse-icon 1.5s ease-in-out infinite;
+        }
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-icon {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .player {
+        padding: 1rem;
+        border-radius: 20px;
+        max-width: 100%;
+    }
+
+    .top {
+        gap: 1.5rem;
+    }
+
+    .cover-container {
+        width: 95px;
+        height: 95px;
+    }
+
+    .vinyl-disc,
+    .vinyl-grooves {
+        width: 120px;
+        height: 120px;
+    }
+
+    .vinyl-grooves::before {
+        width: 105px;
+        height: 105px;
+    }
+
+    .vinyl-grooves::after {
+        width: 90px;
+        height: 90px;
+    }
+
+    .vinyl-grooves span::before {
+        width: 75px;
+        height: 75px;
+    }
+
+    .vinyl-grooves span::after {
+        width: 60px;
+        height: 60px;
+    }
+
+    .cover-container img {
+        width: 52px;
+        height: 52px;
+    }
+
+    .cover-container img.static-mode {
+        width: 100%;
+        height: 100%;
+        border-radius: 14px;
+    }
+
+    .cover-center {
+        width: 12px;
+        height: 12px;
+    }
+
+    .cover-shadow {
+        width: 110px;
+        height: 110px;
+    }
+
+    .name-artist {
+        .name {
+            font-size: 1.05rem;
+        }
+
+        .artist {
+            font-size: 0.85rem;
+        }
+    }
+
+    .cur-lyric {
+        font-size: 0.8rem;
+    }
+
+    .bottom {
+        margin-top: 1rem;
+    }
 
     .controls {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
+        gap: 0.5rem;
+    }
 
-        .control {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
+    .control {
+        width: 38px;
+        height: 38px;
 
-            &.play {
-                transform: scale(1.5);
-            }
+        &.play {
+            width: 50px;
+            height: 50px;
 
-            i {
-                font-size: 1.2rem;
+            .icon {
+                width: 22px;
+                height: 22px;
             }
         }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .player {
+        padding: 0.875rem;
+        border-radius: 18px;
+        position: relative;
+    }
+
+    .top {
+        gap: 0.5rem;
+        flex-direction: column;
+        padding-top: 0.5rem;
+    }
+
+    .cover-container {
+        width: 120px;
+        height: 120px;
+        margin-top: -40px;
+    }
+
+    .vinyl-disc,
+    .vinyl-grooves {
+        width: 160px;
+        height: 160px;
+    }
+
+    .vinyl-grooves::before {
+        width: 140px;
+        height: 140px;
+    }
+
+    .vinyl-grooves::after {
+        width: 120px;
+        height: 120px;
+    }
+
+    .vinyl-grooves span::before {
+        width: 100px;
+        height: 100px;
+    }
+
+    .vinyl-grooves span::after {
+        width: 80px;
+        height: 80px;
+    }
+
+    .cover-container img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .cover-container img.static-mode {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+    }
+
+    .cover-center {
+        width: 16px;
+        height: 16px;
+    }
+
+    .cover-shadow {
+        width: 150px;
+        height: 150px;
+    }
+
+    .info-container {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        gap: 0.625rem;
+        margin-top: 1.5rem;
+    }
+
+    .name-artist {
+        width: 100%;
+    }
+
+    .progress-container {
+        width: 100%;
+    }
+
+    .controls {
+        max-width: 100%;
     }
 }
 </style>

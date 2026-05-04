@@ -19,6 +19,7 @@
     "noLyric": "No lyrics available"
   },
   "theme": {
+    "name": "Theme",
     "light": "Light Theme",
     "dark": "Dark Theme"
   },
