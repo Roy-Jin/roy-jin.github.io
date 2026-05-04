@@ -56,8 +56,8 @@ import { Lrc } from 'lrc-kit';
 import { useEnv } from "@/stores/env";
 import { computed, onMounted, onUnmounted, ref, watch, type FunctionalComponent } from "vue";
 import { useGlobal } from '@/stores/global';
-import { getColorSync } from "colorthief";
 import { useI18n } from 'vue-i18n';
+import { formatTime, getThemeColorFromImage, setCSSVariable } from "@/utils";
 import {
     Repeat,
     Repeat1,
@@ -246,14 +246,6 @@ const updateCurrentLyric = () => {
     global.music.curLrc = lyrics.value[currentLyricIndex]?.content as string;
 }
 
-const formatTime = (time: number) => {
-    if (isNaN(time)) return '00:00';
-
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
 const seekTo = (event: MouseEvent) => {
     if (!audioRef.value || duration.value === 0) return;
 
@@ -291,10 +283,10 @@ const toggleCoverMode = () => {
 }
 
 const loadThemeColor = () => {
-    const color = getColorSync(coverImg.value as HTMLImageElement);
-    if (color) {
-        Player.value?.style.setProperty('--theme-color', color.hex());
-        global.music.themeColor = color.hex();
+    const color = getThemeColorFromImage(coverImg.value as HTMLImageElement);
+    if (color && Player.value) {
+        setCSSVariable('--theme-color', color, Player.value);
+        global.music.themeColor = color;
     }
 }
 

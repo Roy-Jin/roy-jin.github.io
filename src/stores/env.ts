@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useI18n } from "vue-i18n";
+import { formatString } from "@/utils";
 
 export const useEnv = defineStore("env", {
     state: () => ({

@@ -1,15 +1,11 @@
 import { defineStore } from "pinia";
 import { setI18nLanguage } from "@/i18n";
+import { getSystemTheme, setDocumentTheme, createCircleViewTransition, formatString } from "@/utils";
 
 export const useGlobal = defineStore("global", {
   state: () => ({
     lang: "zh" as string,
-    theme: (() => {
-      return window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-    })() as "light" | "dark",
+    theme: getSystemTheme() as "light" | "dark",
     sayings: {
       text: "" as string,
       from: "" as string,
@@ -57,39 +53,11 @@ export const useGlobal = defineStore("global", {
 
       const toggleThemeAction = () => {
         this.theme = newTheme;
-        document.documentElement.setAttribute("data-theme", newTheme);
+        setDocumentTheme(newTheme);
       };
 
-      if (document.startViewTransition && event) {
-        const x = event.clientX;
-        const y = event.clientY;
-
-        const endRadius = Math.hypot(
-          Math.max(x, window.innerWidth - x),
-          Math.max(y, window.innerHeight - y),
-        );
-
-        const transition = document.startViewTransition(() => {
-          toggleThemeAction();
-        });
-
-        transition.ready.then(() => {
-          const clipPath = [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ];
-
-          document.documentElement.animate(
-            {
-              clipPath: clipPath,
-            },
-            {
-              duration: 500,
-              easing: "cubic-bezier(0.2, 0, 0.6, 0.4)",
-              pseudoElement: "::view-transition-new(root)",
-            },
-          );
-        });
+      if (event) {
+        createCircleViewTransition(event, toggleThemeAction);
       } else {
         toggleThemeAction();
       }
@@ -103,36 +71,8 @@ export const useGlobal = defineStore("global", {
         setI18nLanguage(this.lang);
       };
 
-      if (document.startViewTransition && event) {
-        const x = event.clientX;
-        const y = event.clientY;
-
-        const endRadius = Math.hypot(
-          Math.max(x, window.innerWidth - x),
-          Math.max(y, window.innerHeight - y),
-        );
-
-        const transition = document.startViewTransition(() => {
-          toggleLangAction();
-        });
-
-        transition.ready.then(() => {
-          const clipPath = [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`,
-          ];
-
-          document.documentElement.animate(
-            {
-              clipPath: clipPath,
-            },
-            {
-              duration: 500,
-              easing: "cubic-bezier(0.2, 0, 0.6, 0.4)",
-              pseudoElement: "::view-transition-new(root)",
-            },
-          );
-        });
+      if (event) {
+        createCircleViewTransition(event, toggleLangAction);
       } else {
         toggleLangAction();
       }
@@ -189,7 +129,7 @@ export const useGlobal = defineStore("global", {
       upd_freq: number;
     }): Promise<void> {
       if (this.updated_at.gh_repos + config.upd_freq > Date.now()) return;
-      const url = config.api.replace("{0}", config.user);
+      const url = formatString(config.api, config.user);
       await fetch(url)
         .then((response) => response.json())
         .then((data) =>

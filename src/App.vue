@@ -10,6 +10,7 @@
 <script setup lang="ts">
 import { ref, provide, onMounted, computed, defineAsyncComponent } from 'vue'
 import { useGlobal } from './stores/global'
+import { setDocumentTheme } from '@/utils'
 const TargetCursor = defineAsyncComponent(() => import('@/components/Cursor.vue'));
 const Header = defineAsyncComponent(() => import('@/components/Header.vue'))
 
@@ -17,18 +18,18 @@ const headerRef = ref<InstanceType<typeof Header> | null>(null)
 const global = useGlobal()
 
 const headerHeight = computed(() => {
-  return headerRef.value?.height || 0
+    return headerRef.value?.height || 0
 })
 
 provide('header', {
-  show: () => headerRef.value?.show(),
-  hide: () => headerRef.value?.hide()
+    show: () => headerRef.value?.show(),
+    hide: () => headerRef.value?.hide()
 })
 
 onMounted(() => {
-  document.oncontextmenu = () => false;
-  document.documentElement.setAttribute('data-theme', global.theme);
-  useGlobal().initLang();
+    document.oncontextmenu = () => false;
+    setDocumentTheme(global.theme);
+    useGlobal().initLang();
 })
 
 
