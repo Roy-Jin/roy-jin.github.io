@@ -344,6 +344,7 @@ onUnmounted(() => {
     --play-color: rgb(200, 80, 80);
     --vinyl-black: #1a1a1a;
     --vinyl-gray: #2a2a2a;
+    --halo: #444444;
 
     width: 100%;
     max-width: 420px;
@@ -384,7 +385,7 @@ onUnmounted(() => {
     background: radial-gradient(circle at center, var(--vinyl-gray) 0%, var(--vinyl-black) 35%, var(--vinyl-gray) 55%, var(--vinyl-black) 100%);
     box-shadow: 
         0 8px 24px color-mix(in srgb, var(--theme-color) 25%, transparent),
-        inset 0 0 20px color-mix(in srgb, var(--text-color) 5%, transparent);
+        inset 0 0 20px color-mix(in srgb, var(--halo) 5%, transparent);
     z-index: 1;
     opacity: 1;
     transform: scale(1);
@@ -431,7 +432,7 @@ onUnmounted(() => {
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 1px solid color-mix(in srgb, var(--text-color) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--halo) 8%, transparent);
 }
 
 .vinyl-grooves::before {
@@ -486,10 +487,10 @@ onUnmounted(() => {
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    background: var(--main-bg);
+    background: var(--vinyl-black);
     z-index: 5;
     box-shadow: 
-        inset 0 0 0 2px color-mix(in srgb, var(--text-color) 15%, transparent),
+        inset 0 0 0 2px color-mix(in srgb, var(--halo) 50%, transparent),
         0 0 0 1px var(--vinyl-gray);
     opacity: 1;
     transform: scale(1);
