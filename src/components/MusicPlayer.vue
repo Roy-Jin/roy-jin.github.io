@@ -427,6 +427,7 @@ onUnmounted(() => {
     flex-direction: column;
     gap: 0.75rem;
     min-width: 0;
+    width: 100%;
 }
 
 .name-artist {
@@ -460,6 +461,8 @@ onUnmounted(() => {
     min-height: 1.25rem;
     opacity: 0.85;
     color: var(--text-color);
+    width: 100%;
+    max-width: 100%;
 }
 
 .progress-container {
@@ -654,6 +657,11 @@ onUnmounted(() => {
 
     .name-artist {
         width: 100%;
+    }
+
+    .cur-lyric {
+        width: 100%;
+        max-width: 100%;
     }
 
     .progress-container {
