@@ -1,5 +1,6 @@
 <template>
-    <div @click="handleClick" class="project cursor-target" :style="{ background: `color-mix(in srgb, ${repo.color ?? ''} 20%, transparent)` }">
+    <div @click="handleClick" class="project cursor-target"
+        :style="{ background: `color-mix(in srgb, ${repo.color ?? ''} 20%, transparent)` }">
         <div class="project-content">
             <div class="project-header">
                 <div class="project-name">{{ repo.name }}</div>
@@ -36,8 +37,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { Star, Circle, GitFork, Eye, Clock } from 'lucide-vue-next';
+import { showConfirmDialog } from 'vant';
 
-const { t } = useI18n(); 
+const { t } = useI18n();
 interface Repo {
     name: string;
     html_url: string;
@@ -54,13 +56,17 @@ const props = defineProps<{
     repo: Repo;
 }>();
 
-const emit = defineEmits<{
-    click: [url: string];
-}>();
-
 const handleClick = () => {
     if (props.repo.html_url) {
-        emit('click', props.repo.html_url);
+        showConfirmDialog({
+            title: t('tips.openLink.title'),
+            message: `${t('tips.openLink.message')}\n\n${props.repo.html_url}`,
+            cancelButtonColor: 'color-mix(in srgb, grey 60%, transparent)',
+            confirmButtonColor: 'var(--theme-color)',
+            closeOnClickOverlay: true
+        }).then(() => {
+            window.open(props.repo.html_url, '_blank');
+        }).catch(() => { });
     }
 };
 
@@ -69,7 +75,7 @@ const formatDate = (dateString: string) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) {
         return t('date.today');
     } else if (diffDays === 1) {

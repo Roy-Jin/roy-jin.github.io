@@ -6,7 +6,7 @@
             <div class="subtitle">{{ t('subtitle') }}</div>
         </div>
         <Quote :quote="t('quote')" />
-        <SocialLinks @click="handleLinkClick" />
+        <SocialLinks />
     </div>
 </template>
 
@@ -17,14 +17,6 @@ import { useI18n } from 'vue-i18n';
 
 const env = useEnv();
 const { t } = useI18n();
-
-const emit = defineEmits<{
-    'link-click': [url: string];
-}>();
-
-const handleLinkClick = (url: string) => {
-    emit('link-click', url);
-};
 </script>
 
 <style scoped>

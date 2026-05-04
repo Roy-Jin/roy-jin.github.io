@@ -11,7 +11,11 @@
 import { defineAsyncComponent, computed } from 'vue';
 import { useEnv } from '@/stores/env';
 const Icon = defineAsyncComponent(() => import('../Icon.vue'));
+import { useI18n } from 'vue-i18n';
+import { showConfirmDialog } from 'vant';
+import 'vant/es/dialog/style';
 
+const { t } = useI18n();
 const env = useEnv();
 
 const socialLinks = computed(() => {
@@ -24,12 +28,16 @@ const socialLinks = computed(() => {
     }).filter(link => link !== null);
 });
 
-const emit = defineEmits<{
-    click: [url: string];
-}>();
-
 const handleClick = (url: string) => {
-    emit('click', url);
+    showConfirmDialog({
+        title: t('tips.openLink.title'),
+        message: `${t('tips.openLink.message')}\n\n${url}`,
+        cancelButtonColor: 'color-mix(in srgb, grey 60%, transparent)',
+        confirmButtonColor: 'var(--theme-color)',
+        closeOnClickOverlay: true
+    }).then(() => {
+        window.open(url, '_blank');
+    }).catch(() => { });
 };
 </script>
 

@@ -1,10 +1,10 @@
 <template>
-  <Header ref="headerRef" />
-  <div class="views" :style="{ paddingTop: headerHeight + 'px' }">
-    <router-view />
-  </div>
-  <TargetCursor :spin-duration="1.5" />
-  <van-config-provider :theme="global.theme" />
+    <Header ref="headerRef" />
+    <div class="views" :style="{ paddingTop: headerHeight + 'px' }">
+        <router-view />
+    </div>
+    <TargetCursor :spin-duration="1.5" />
+    <van-config-provider :theme="global.theme" />
 </template>
 
 <script setup lang="ts">
@@ -40,15 +40,15 @@ onMounted(() => {
 @import "tailwindcss";
 
 #app {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .views {
-  flex: 1;
-  width: 100%;
-  height: 100%;
+    flex: 1;
+    width: 100%;
+    height: 100%;
 }
 </style>
