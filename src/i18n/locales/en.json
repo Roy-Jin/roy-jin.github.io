@@ -30,5 +30,12 @@
   },
   "menu": {
     "title": "Menu"
+  },
+  "date": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{days} days ago",
+    "monthsAgo": "{months} months ago",
+    "yearsAgo": "{years} years ago"
   }
 }

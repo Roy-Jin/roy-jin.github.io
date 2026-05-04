@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [
     VueRouter(),
     vue(),
-    // vueDevTools(),
+    vueDevTools(),
     tailwindcss()
   ],
   resolve: {

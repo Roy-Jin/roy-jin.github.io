@@ -30,5 +30,12 @@
   },
   "menu": {
     "title": "控制栏"
+  },
+  "date": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "daysAgo": "{days} 天前",
+    "monthsAgo": "{months} 个月前",
+    "yearsAgo": "{years} 年前"
   }
 }

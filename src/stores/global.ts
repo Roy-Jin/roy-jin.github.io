@@ -13,7 +13,14 @@ export const useGlobal = defineStore("global", {
     gh_repos: [] as {
       name: string;
       html_url: string;
-      description: string;
+      description: string | null;
+      stargazers_count?: number;
+      forks_count?: number;
+      watchers_count?: number;
+      language?: string | null;
+      pushed_at?: string;
+      updated_at?: string;
+      color?: string;
       [key: string]: unknown;
     }[],
     music: {
@@ -134,8 +141,6 @@ export const useGlobal = defineStore("global", {
         .then((response) => response.json())
         .then((data) =>
           this.gh_repos = data
-            .sort((a: any, b: any) => b.stargazers_count - a.stargazers_count)
-            .splice(0, config.show_count)
         );
       this.updated_at.gh_repos = Date.now();
     },
