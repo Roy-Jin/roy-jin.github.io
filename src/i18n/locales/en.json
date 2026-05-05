@@ -4,7 +4,9 @@
     "openLink": {
       "title": "Open this link?",
       "message": "You sure you wanna open this?"
-    }
+    },
+    "expand": "Expand",
+    "collapse": "Collapse"
   },
   "subtitle": "Hi, welcome to my personal website!",
   "quote": "Coffee is bitter, Life is sweet.",
@@ -16,20 +18,20 @@
     }
   },
   "music": {
-    "noLyric": "No lyrics available"
+    "noLyric": "No words, yet the music speaks."
   },
   "theme": {
     "name": "Theme",
-    "light": "Light Theme",
-    "dark": "Dark Theme"
+    "light": "Light Mode",
+    "dark": "Dark Mode"
   },
   "lang": {
-    "name": "Lang",
+    "name": "Language",
     "zh": "中文",
     "en": "English"
   },
   "menu": {
-    "title": "Menu"
+    "title": "Menus"
   },
   "date": {
     "today": "Today",
@@ -37,5 +39,9 @@
     "daysAgo": "{days} days ago",
     "monthsAgo": "{months} months ago",
     "yearsAgo": "{years} years ago"
+  },
+  "projects": {
+    "title": "Repositories",
+    "showMore": "Show More Repositories"
   }
 }

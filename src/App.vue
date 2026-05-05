@@ -32,7 +32,6 @@ onMounted(() => {
     useGlobal().initLang();
 })
 
-
 </script>
 
 <style>

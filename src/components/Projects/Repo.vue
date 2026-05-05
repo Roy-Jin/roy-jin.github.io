@@ -1,11 +1,16 @@
 <template>
-    <div @click="handleClick" class="project cursor-target"
+    <div @click="handleClick" class="project cursor-target" :class="{ 'active': isAnimating }"
         :style="{ background: `color-mix(in srgb, ${repo.color ?? ''} 20%, transparent)` }">
         <div class="project-content">
             <div class="project-header">
                 <div class="project-name">{{ repo.name }}</div>
             </div>
-            <div v-if="repo.description" class="project-description">{{ repo.description }}</div>
+            <div v-if="repo.description" class="project-description">
+                <TextEllipsis :content="repo.description" rows="2" :expand-text="t('tips.expand')"
+                    :collapse-text="t('tips.collapse')" @click-action="(event) => {
+                        event.stopPropagation();
+                    }" />
+            </div>
             <div class="project-footer">
                 <div class="project-stats">
                     <span v-if="repo.language" class="stat-item">
@@ -35,9 +40,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Star, Circle, GitFork, Eye, Clock } from 'lucide-vue-next';
-import { showConfirmDialog } from 'vant';
+import { showConfirmDialog, TextEllipsis } from 'vant';
+import 'vant/es/text-ellipsis/style';
 
 const { t } = useI18n();
 interface Repo {
@@ -56,7 +63,13 @@ const props = defineProps<{
     repo: Repo;
 }>();
 
+const isAnimating = ref(false);
+
 const handleClick = () => {
+    isAnimating.value = true;
+    setTimeout(() => {
+        isAnimating.value = false;
+    }, 400);
     if (props.repo.html_url) {
         showConfirmDialog({
             title: t('tips.openLink.title'),
@@ -107,6 +120,45 @@ const formatDate = (dateString: string) => {
     font-family: "Electrolize", sans-serif;
     border-left: 4px solid var(--theme-color);
     background-color: var(--theme-color-light);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--theme-color) 10%, transparent), transparent);
+        transition: left 0.6s ease;
+    }
+
+    &:hover {
+        border-color: var(--theme-color);
+        box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-color) 20%, transparent);
+
+        &::before {
+            left: 100%;
+        }
+
+        .project-name {
+            transform: translateX(4px);
+        }
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &.active {
+        .project-content {
+            animation: pulse 0.4s ease;
+        }
+    }
 }
 
 .project-content {
@@ -114,6 +166,9 @@ const formatDate = (dateString: string) => {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
 }
 
 .project-header {
@@ -123,15 +178,18 @@ const formatDate = (dateString: string) => {
 }
 
 .project-name {
-    font-size: 1.15rem;
+    font-size: 1.5rem;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: transform 0.3s ease;
 }
 
 .project-description {
     font-size: 0.9rem;
-    opacity: 0.8;
-    line-height: 1.5;
     font-family: "仓耳渔阳体";
+    --van-text-ellipsis-action-color: var(--theme-color);
 }
 
 .project-footer {
@@ -156,11 +214,31 @@ const formatDate = (dateString: string) => {
     gap: 0.35rem;
 }
 
+@media (max-width: 480px) {
+
+    .stat-item:nth-child(3),
+    .stat-item:nth-child(4) {
+        display: none;
+    }
+}
+
 .project-updated {
     display: flex;
     align-items: center;
     gap: 0.35rem;
     font-size: 0.8rem;
     opacity: 0.65;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
 }
 </style>

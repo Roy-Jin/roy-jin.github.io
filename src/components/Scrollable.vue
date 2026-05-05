@@ -8,6 +8,10 @@
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import BScroll from '@better-scroll/core'
 import type { Options } from '@better-scroll/core'
+import MouseWheel from '@better-scroll/mouse-wheel';
+import ObserveDOM from '@better-scroll/observe-dom';
+import ObserveImage from '@better-scroll/observe-image';
+import ScrollBar from '@better-scroll/scroll-bar';
 
 // Props：允许外部传入配置
 const props = withDefaults(
@@ -33,36 +37,23 @@ const defaultOptions: Options = {
     disableTouch: false, // 不禁止 touch 事件
     disableMouse: false, // 不禁止 mouse 事件
     mouseWheel: true,    // 允许滚轮事件
+    scrollbar: undefined,     // 不显示滚动条
     ...props.options
 }
 
-const debounce = (func: Function, wait: number) => {
-    let timeout: ReturnType<typeof setTimeout>;
-    return (...args: any[]) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            func.apply(this, args);
-        }, wait);
-    }
-}
-const refresh = debounce(() => {
-    if (bsInstance) {
-        bsInstance.refresh()
-    }
-}, 500)
-
-
 onMounted(() => {
     if (wrapperRef.value) {
+        BScroll.use(MouseWheel);
+        BScroll.use(ObserveDOM);
+        BScroll.use(ObserveImage);
+        BScroll.use(ScrollBar);
         bsInstance = new BScroll(wrapperRef.value, defaultOptions)
     }
-    window.addEventListener("resize", () => refresh())
 })
 
 onUnmounted(() => {
     bsInstance?.destroy()
     bsInstance = null
-    window.removeEventListener("resize", () => refresh())
 })
 
 watch(

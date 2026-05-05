@@ -5,7 +5,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import i18n from "./i18n";
 import { ConfigProvider } from 'vant';
-import '@vant/touch-emulator';
 
 import App from "./App.vue";
 

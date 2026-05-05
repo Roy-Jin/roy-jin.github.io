@@ -63,5 +63,18 @@ const handleClick = (url: string) => {
     justify-content: center;
     background-color: color-mix(in srgb, var(--link-color) 20%, transparent);
     color: color-mix(in srgb, var(--theme-color) 85%, transparent);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    border: 2px solid transparent;
+
+    &:hover {
+        background-color: color-mix(in srgb, var(--link-color) 30%, transparent);
+        border-color: color-mix(in srgb, var(--link-color) 40%, transparent);
+        box-shadow: 0 4px 12px color-mix(in srgb, var(--link-color) 20%, transparent);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
 }
 </style>

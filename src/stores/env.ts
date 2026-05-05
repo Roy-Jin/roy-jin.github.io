@@ -1,6 +1,4 @@
 import { defineStore } from "pinia";
-import { useI18n } from "vue-i18n";
-import { formatString } from "@/utils";
 
 export const useEnv = defineStore("env", {
     state: () => ({
@@ -99,7 +97,6 @@ export const useEnv = defineStore("env", {
         },
         gh_repos: {
             user: "Roy-Jin",
-            show_count: 2,
             api: "https://api.github.com/users/{0}/repos?per_page=20",
             upd_freq: (1000 * 60) * 10, // 10 minutes
         },

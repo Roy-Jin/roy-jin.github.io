@@ -131,7 +131,6 @@ export const useGlobal = defineStore("global", {
 
     async loadGhRepos(config: {
       user: string;
-      show_count: number;
       api: string;
       upd_freq: number;
     }): Promise<void> {

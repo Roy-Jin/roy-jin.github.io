@@ -31,7 +31,7 @@ export const formatDate = (dateString: string) => {
   }
 };
 
-export const filterRepos = (repos: Repo[], excludePatterns: string[] = ["roy-jin", "cloud", "learn"], showCount: number = 4) => {
+export const filterRepos = (repos: Repo[], excludePatterns: string[] = ["roy-jin", "cloud", "learn"]) => {
   const excludeRegex = new RegExp(excludePatterns.join('|'), 'i');
   
   let filtered = repos.filter(repo => {
@@ -45,5 +45,5 @@ export const filterRepos = (repos: Repo[], excludePatterns: string[] = ["roy-jin
     return new Date(b.pushed_at || b.updated_at || Date.now()).getTime() - new Date(a.pushed_at || a.updated_at || Date.now()).getTime();
   });
   
-  return filtered.slice(0, showCount);
+  return filtered;
 };

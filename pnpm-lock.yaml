@@ -11,6 +11,18 @@ importers:
       '@better-scroll/core':
         specifier: ^2.5.1
         version: 2.5.1
+      '@better-scroll/mouse-wheel':
+        specifier: ^2.5.1
+        version: 2.5.1
+      '@better-scroll/observe-dom':
+        specifier: ^2.5.1
+        version: 2.5.1
+      '@better-scroll/observe-image':
+        specifier: ^2.5.1
+        version: 2.5.1
+      '@better-scroll/scroll-bar':
+        specifier: ^2.5.1
+        version: 2.5.1
       '@vant/touch-emulator':
         specifier: ^1.5.0
         version: 1.5.0
@@ -232,6 +244,18 @@ packages:
 
   '@better-scroll/core@2.5.1':
     resolution: {integrity: sha512-koKOuYA55dQ04FJRIVUpMGDr1hbCfWmfX0MGp1hKagkQSWSRpwblqACiwtggVauoj9aaJRJZ9hDsTM4weaavlg==}
+
+  '@better-scroll/mouse-wheel@2.5.1':
+    resolution: {integrity: sha512-DGnrirRMY6zMM7xwgx09D/cA9A//3J1/uDkq8iBVEyE5p0sEr/keQpjEfFHGkBRa505BnbBwdbN6f5lugEDSPw==}
+
+  '@better-scroll/observe-dom@2.5.1':
+    resolution: {integrity: sha512-TCMGFLRfpXBPIwtUV/efliUmfmrhSNI7NXdSyjdWjsLOS7dh3eFkmcom5ERVWMaXVELSmujGXLqobT+dT0C/jg==}
+
+  '@better-scroll/observe-image@2.5.1':
+    resolution: {integrity: sha512-0Lhfj83o8EESwOxr8bfStCzNOokTm3KB7JeyMS8u/xl+3tyTuls9889cyAukYk4Yly1cS49pCGfj2P8YOiwtUg==}
+
+  '@better-scroll/scroll-bar@2.5.1':
+    resolution: {integrity: sha512-i6r60pWG/ztkFK2j5Gj54I0LJb2jGh5TWJNQBoW0gUkp28B+0JvBFTwZn9tF7beZCBorKR7Hvvu4O9A1TJy94Q==}
 
   '@better-scroll/shared-utils@2.5.1':
     resolution: {integrity: sha512-AplkfSjXVYP9LZiD6JsKgmgQJ/mG4uuLmBuwLz8W5OsYc7AYTfN8kw6GqZ5OwCGoXkVhBGyd8NeC4xwYItp0aw==}
@@ -1848,6 +1872,22 @@ snapshots:
   '@better-scroll/core@2.5.1':
     dependencies:
       '@better-scroll/shared-utils': 2.5.1
+
+  '@better-scroll/mouse-wheel@2.5.1':
+    dependencies:
+      '@better-scroll/core': 2.5.1
+
+  '@better-scroll/observe-dom@2.5.1':
+    dependencies:
+      '@better-scroll/core': 2.5.1
+
+  '@better-scroll/observe-image@2.5.1':
+    dependencies:
+      '@better-scroll/core': 2.5.1
+
+  '@better-scroll/scroll-bar@2.5.1':
+    dependencies:
+      '@better-scroll/core': 2.5.1
 
   '@better-scroll/shared-utils@2.5.1': {}
 

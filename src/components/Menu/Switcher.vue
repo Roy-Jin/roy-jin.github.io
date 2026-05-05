@@ -147,9 +147,12 @@ const handleClick = (event: MouseEvent) => {
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.15);
     }
@@ -160,6 +163,7 @@ const handleClick = (event: MouseEvent) => {
         transform: rotate(-180deg) scale(0.5);
         opacity: 0;
     }
+
     to {
         transform: rotate(0deg) scale(1);
         opacity: 1;

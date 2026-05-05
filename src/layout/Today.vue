@@ -12,7 +12,6 @@
                     <Counter :font-size="50" :font-weight="600" :value="time.seconds"
                         :mediaScreen="[{ maxWidth: 768, props: { fontSize: 40 } }]" />
                 </span>
-                <span class="sub">{{ time.period }}</span>
             </p>
             <p class="day">{{ time.day }}</p>
         </div>
@@ -31,7 +30,7 @@ import { Counter } from '@/components/Today';
 import { useI18n } from 'vue-i18n';
 import { useGlobal } from '@/stores/global';
 
-const { t } = useI18n(); 
+const { t } = useI18n();
 const global = useGlobal();
 
 const time = ref({
@@ -47,7 +46,7 @@ let updateInterval: any;
 const updateTime = () => {
     const now = dayjs();
     time.value = {
-        hours: Number(now.format('hh')),
+        hours: Number(now.format('HH')),
         minutes: Number(now.format('mm')),
         seconds: Number(now.format('ss')),
         period: now.format('A'),
