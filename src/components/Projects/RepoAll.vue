@@ -1,14 +1,14 @@
 <template>
     <Popup v-model:show="show" round position="bottom" :teleport="'body'" :style="{ height: '90%', overflow: 'hidden' }"
         :lazy-render="false" :lock-scroll="false" :closeable="true">
-        <Scrollable ref="scrollableRef" :options="{ scrollbar: true }">
-            <div class="popup-content">
-                <h2 class="popup-title">{{ t('projects.title') }}</h2>
+        <div class="popup-content">
+            <h2 class="popup-title">{{ t('projects.title') }}</h2>
+            <Scrollable ref="scrollableRef" :options="{ scrollbar: true }">
                 <div class="repos-grid">
                     <Repo v-for="repo in repos" :key="repo.html_url" :repo="repo" class="repo-item" />
                 </div>
-            </div>
-        </Scrollable>
+            </Scrollable>
+        </div>
     </Popup>
 </template>
 
@@ -62,13 +62,16 @@ defineExpose({
 
 <style scoped>
 .popup-content {
-    padding: 1.5rem;
+    padding: 1rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .popup-title {
     font-size: 1.75rem;
     font-weight: 700;
-    margin-bottom: 1.5rem;
     text-align: center;
     color: var(--text-color);
 }
@@ -80,6 +83,10 @@ defineExpose({
 }
 
 @media (min-width: 640px) {
+    .popup-content {
+        padding: 1.5rem;
+    }
+
     .repos-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1.25rem;
