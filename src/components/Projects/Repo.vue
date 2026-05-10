@@ -6,10 +6,9 @@
                 <div class="project-name">{{ repo.name }}</div>
             </div>
             <div v-if="repo.description" class="project-description">
-                <TextEllipsis :content="repo.description" rows="2" :expand-text="t('tips.expand')"
-                    :collapse-text="t('tips.collapse')" @click-action="(event) => {
-                        event.stopPropagation();
-                    }" />
+                <TextEllipsis>
+                    {{ repo.description }}
+                </TextEllipsis>
             </div>
             <div class="project-footer">
                 <div class="project-stats">
@@ -43,8 +42,8 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Star, Circle, GitFork, Eye, Clock } from 'lucide-vue-next';
-import { showConfirmDialog, TextEllipsis } from 'vant';
-import 'vant/es/text-ellipsis/style';
+import { showConfirmDialog } from 'vant';
+import TextEllipsis from '@/components/TextEllipsis.vue';
 
 const { t } = useI18n();
 interface Repo {
@@ -188,8 +187,6 @@ const formatDate = (dateString: string) => {
 
 .project-description {
     font-size: 0.9rem;
-    font-family: "仓耳渔阳体";
-    --van-text-ellipsis-action-color: var(--theme-color);
 }
 
 .project-footer {

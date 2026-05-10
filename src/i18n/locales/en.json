@@ -42,6 +42,8 @@
   },
   "projects": {
     "title": "Repositories",
-    "showMore": "Show More Repositories"
+    "showMore": "Show More Repositories",
+    "searchPlaceholder": "Search repositories...",
+    "noResults": "No repositories found"
   }
 }

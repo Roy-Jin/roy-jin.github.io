@@ -17,7 +17,11 @@
         </div>
         <hr>
         <div id="sayings">
-            <p class="text">{{ global.sayings.text }}</p>
+            <p class="text">
+                <TextEllipsis>
+                    {{ global.sayings.text }}
+                </TextEllipsis>
+            </p>
             <p class="from">——《{{ t(global.sayings.from) }}》</p>
         </div>
     </div>
@@ -29,6 +33,7 @@ import dayjs from 'dayjs';
 import { Counter } from '@/components/Today';
 import { useI18n } from 'vue-i18n';
 import { useGlobal } from '@/stores/global';
+import TextEllipsis from '@/components/TextEllipsis.vue';
 
 const { t } = useI18n();
 const global = useGlobal();

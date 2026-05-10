@@ -19,6 +19,7 @@
 :root:root {
     /* Vant 自定义变量 */
     --van-base-font: "仓耳渔阳体";
+    --van-background-2: var(--main-bg);
 }
 
 [data-theme="dark"] {

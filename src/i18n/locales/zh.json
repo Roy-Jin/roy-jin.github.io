@@ -42,6 +42,8 @@
   },
   "projects": {
     "title": "仓库列表",
-    "showMore": "展示更多仓库"
+    "showMore": "展示更多仓库",
+    "searchPlaceholder": "搜索仓库...",
+    "noResults": "未找到相关仓库"
   }
 }
