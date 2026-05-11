@@ -36,23 +36,11 @@ import 'vant/es/popup/style';
 import { Search, X } from '@lucide/vue';
 import { Motion, AnimatePresence } from 'motion-v';
 import Scrollable from '@/components/Scrollable.vue';
-import { Repo } from '@/components/Projects';
+import { Repo, type RepoProps } from '@/components/Projects';
 import { useDebouncedRef } from '@/utils';
 
-interface Repo {
-    name: string;
-    html_url: string;
-    description: string | null;
-    stargazers_count?: number;
-    forks_count?: number;
-    watchers_count?: number;
-    language?: string | null;
-    pushed_at?: string;
-    color?: string;
-}
-
 const props = defineProps<{
-    repos: Repo[];
+    repos: RepoProps[];
 }>();
 
 const { t } = useI18n();
@@ -70,6 +58,7 @@ const filteredRepos = computed(() => {
     return props.repos.filter(repo =>
         repo.name.toLowerCase().includes(query) ||
         (repo.description && repo.description.toLowerCase().includes(query)) ||
+        (repo.description_zh && repo.description_zh.toLowerCase().includes(query)) ||
         (repo.language && repo.language.toLowerCase().includes(query))
     );
 });

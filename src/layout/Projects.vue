@@ -12,6 +12,7 @@
 <script setup lang='ts'>
 import { computed, ref } from 'vue';
 import { useGlobal } from '@/stores/global';
+import { useEnv } from '@/stores/env';
 import { filterRepos } from '@/utils';
 import { Repo, RepoAll } from '@/components/Projects';
 import { useI18n } from 'vue-i18n';
@@ -19,11 +20,12 @@ import { FolderGit2 } from '@lucide/vue';
 
 const { t } = useI18n();
 const global = useGlobal();
+const env = useEnv();
 
 const repoAllRef = ref<typeof RepoAll | null>(null);
 
 const filteredRepos = computed(() => {
-    return filterRepos(global.gh_repos, ['roy-jin', 'cloud', 'learn']);
+    return filterRepos(global.gh_repos, env.gh_repos.excludePatterns);
 });
 </script>
 

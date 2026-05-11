@@ -8,8 +8,8 @@
                     {{ repo.name }}
                 </span>
             </div>
-            <div v-if="repo.description" class="project-description">
-                <TextEllipsis> {{ repo.description }}</TextEllipsis>
+            <div v-if="displayDescription" class="project-description">
+                <TextEllipsis> {{ displayDescription }}</TextEllipsis>
             </div>
             <div class="project-footer">
                 <div class="project-stats">
@@ -40,28 +40,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Star, Code, GitFork, Eye, Clock, BookMarked } from '@lucide/vue';
 import { showConfirmDialog } from 'vant';
 import TextEllipsis from '@/components/TextEllipsis.vue';
+import type { RepoProps } from '@/components/Projects';
 
-const { t } = useI18n();
-interface Repo {
-    name: string;
-    html_url: string;
-    description: string | null;
-    stargazers_count?: number;
-    forks_count?: number;
-    watchers_count?: number;
-    language?: string | null;
-    pushed_at?: string;
-    color?: string;
-}
+const { t, locale } = useI18n();
 
 const props = defineProps<{
-    repo: Repo;
+    repo: RepoProps;
 }>();
+
+const displayDescription = computed(() => {
+    if (locale.value === 'zh' && props.repo.description_zh) {
+        return props.repo.description_zh;
+    }
+    return props.repo.description;
+});
 
 const isAnimating = ref(false);
 

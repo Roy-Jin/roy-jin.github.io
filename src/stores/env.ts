@@ -89,9 +89,9 @@ export const useEnv = defineStore("env", {
                         return {
                             text: data.text,
                             from: "sayings.from.facts",
-                        }
-                    }
-                }
+                        };
+                    },
+                },
             ],
             upd_freq: (1000 * 60) * 1, // 1 minutes
         },
@@ -99,6 +99,10 @@ export const useEnv = defineStore("env", {
             user: "Roy-Jin",
             api: "https://api.github.com/users/{0}/repos?per_page=20",
             upd_freq: (1000 * 60) * 10, // 10 minutes
+            excludePatterns: ["roy-jin", "cloud", "learn"],
+        },
+        translate: {
+            api: "https://suapi.net/api/text/translate",
         },
         music: {
             apis: [

@@ -2,6 +2,7 @@ interface Repo {
   name: string;
   html_url: string;
   description: string | null;
+  description_zh?: string | null;
   stargazers_count?: number;
   forks_count?: number;
   watchers_count?: number;
@@ -31,7 +32,7 @@ export const formatDate = (dateString: string) => {
   }
 };
 
-export const filterRepos = (repos: Repo[], excludePatterns: string[] = ["roy-jin", "cloud", "learn"]) => {
+export const filterRepos = (repos: Repo[], excludePatterns: string[] = []) => {
   const excludeRegex = new RegExp(excludePatterns.join('|'), 'i');
   
   let filtered = repos.filter(repo => {

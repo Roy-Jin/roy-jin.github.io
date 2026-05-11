@@ -1,6 +1,13 @@
 import { defineStore } from "pinia";
 import { setI18nLanguage } from "@/i18n";
-import { getSystemTheme, setDocumentTheme, createCircleViewTransition, formatString } from "@/utils";
+import { useEnv } from "@/stores/env";
+import {
+  createCircleViewTransition,
+  formatString,
+  getSystemTheme,
+  setDocumentTheme,
+  translateTexts
+} from "@/utils";
 
 export const useGlobal = defineStore("global", {
   state: () => ({
@@ -14,6 +21,7 @@ export const useGlobal = defineStore("global", {
       name: string;
       html_url: string;
       description: string | null;
+      description_zh: string | null;
       stargazers_count?: number;
       forks_count?: number;
       watchers_count?: number;
@@ -136,12 +144,27 @@ export const useGlobal = defineStore("global", {
     }): Promise<void> {
       if (this.updated_at.gh_repos + config.upd_freq > Date.now()) return;
       const url = formatString(config.api, config.user);
-      await fetch(url)
-        .then((response) => response.json())
-        .then((data) =>
-          this.gh_repos = data
-        );
+      const data = await fetch(url).then((response) => response.json());
+
+      this.gh_repos = data.map((repo: any) => ({
+        ...repo,
+        description_zh: null,
+      }));
+
       this.updated_at.gh_repos = Date.now();
+
+      const env = useEnv();
+
+      translateTexts(
+        data.map((repo: any) => repo.description || ""),
+        "zh",
+        env.translate.api,
+      ).then((translatedDescriptions) => {
+        this.gh_repos = this.gh_repos.map((repo, index) => ({
+          ...repo,
+          description_zh: translatedDescriptions[index] || repo.description,
+        }));
+      });
     },
 
     async loadMusic(config: {
