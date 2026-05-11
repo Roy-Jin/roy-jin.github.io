@@ -1,6 +1,6 @@
 <template>
     <Popup v-model:show="show" round position="bottom" :teleport="'body'" :style="{ height: '90%', overflow: 'hidden' }"
-        :lazy-render="false" :lock-scroll="false" :closeable="true">
+        :lock-scroll="false" :closeable="true">
         <div class="popup-content">
             <h2 class="popup-title">{{ t('projects.title') }}</h2>
             <div class="search-wrapper cursor-target">

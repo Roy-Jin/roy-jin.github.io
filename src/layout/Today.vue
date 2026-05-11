@@ -18,7 +18,7 @@
         <hr>
         <div id="sayings">
             <p class="text">
-                <TextEllipsis>
+                <TextEllipsis :rows="3">
                     {{ global.sayings.text }}
                 </TextEllipsis>
             </p>

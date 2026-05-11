@@ -1,5 +1,5 @@
 <template>
-    <Scrollable ref="scrollRef">
+    <Scrollable ref="scrollRef" :style="{ overflow: 'unset' }">
         <div class="wrapper">
             <Profile />
             <div class="content">

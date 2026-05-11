@@ -33,5 +33,7 @@ const env = useEnv();
 <style scoped>
 .avatar {
     max-width: 66%;
+    border-radius: 50%;
+    overflow: hidden;
 }
 </style>
