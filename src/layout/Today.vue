@@ -18,9 +18,7 @@
         <hr>
         <div id="sayings">
             <p class="text">
-                <TextEllipsis :rows="3">
-                    {{ global.sayings.text }}
-                </TextEllipsis>
+                <TextEllipsis :maxLines="3">{{ global.sayings.text }}</TextEllipsis>
             </p>
             <p class="from">——《{{ t(global.sayings.from) }}》</p>
         </div>

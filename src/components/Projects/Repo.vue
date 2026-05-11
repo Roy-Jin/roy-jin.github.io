@@ -6,9 +6,7 @@
                 <div class="project-name">{{ repo.name }}</div>
             </div>
             <div v-if="repo.description" class="project-description">
-                <TextEllipsis>
-                    {{ repo.description }}
-                </TextEllipsis>
+                <TextEllipsis> {{ repo.description }}</TextEllipsis>
             </div>
             <div class="project-footer">
                 <div class="project-stats">

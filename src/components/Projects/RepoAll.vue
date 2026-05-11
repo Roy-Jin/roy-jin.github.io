@@ -3,12 +3,12 @@
         :lock-scroll="false" :closeable="true">
         <div class="popup-content">
             <h2 class="popup-title">{{ t('projects.title') }}</h2>
-            <div class="search-wrapper cursor-target">
+            <label class="search-wrapper cursor-target">
                 <Search class="search-icon" :size="20" />
                 <input v-model="searchQuery" type="text" :placeholder="t('projects.searchPlaceholder')"
                     class="search-input" />
                 <X v-if="searchQuery" class="clear-icon" :size="20" @click="clearSearch" />
-            </div>
+            </label>
             <Scrollable ref="scrollableRef" :options="{ scrollbar: true }">
                 <div class="repos-grid">
                     <AnimatePresence>
@@ -107,6 +107,8 @@ defineExpose({
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    max-width: 68rem;
+    margin: 0 auto;
 }
 
 .popup-title {
@@ -131,6 +133,7 @@ defineExpose({
 
 .search-input {
     flex: 1;
+    min-width: 0;
     border: none;
     outline: none;
     background: transparent;
@@ -138,6 +141,13 @@ defineExpose({
     &::placeholder {
         opacity: 0.68;
     }
+}
+
+.search-icon,
+.clear-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
 }
 
 .repos-grid {

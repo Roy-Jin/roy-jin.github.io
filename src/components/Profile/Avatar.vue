@@ -12,7 +12,7 @@
                 <img :src="env.avatar[0]" style="width: 200px; height: 200px; object-fit: cover;" />
                 <video v-if="env.avatar_video" width="200" height="200" autoplay loop muted playsinline disablepictureinpicture
                     disableremoteplayback
-                    style="width: 200px; height: 200px; position: absolute; top: 0; left: 0; object-fit: cover;"
+                    style="width: 200px; height: 200px; position: absolute; top: 0; left: 0; object-fit: cover; border-radius: 50%;"
                     controlslist="nodownload nofullscreen noremoteplayback">
                     <source :src="env.avatar_video" type="video/webm" />
                 </video>

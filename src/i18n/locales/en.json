@@ -5,8 +5,8 @@
       "title": "Open this link?",
       "message": "You sure you wanna open this?"
     },
-    "expand": "Expand",
-    "collapse": "Collapse"
+    "expand": "More",
+    "collapse": "Less"
   },
   "subtitle": "Hi, welcome to my personal website!",
   "quote": "Coffee is bitter, Life is sweet.",

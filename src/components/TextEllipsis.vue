@@ -1,42 +1,42 @@
 <template>
-    <div ref="containerRef">
-        <TextEllipsis :key="renderKey" v-bind="$attrs" :expand-text="props.expandText || t('tips.expand')"
-            :collapse-text="props.collapseText || t('tips.collapse')" :content="computedContent" :rows="props.rows"
-            @click-action="(event: MouseEvent) => {
+    <LineClamp as="span" v-model:expanded="expanded" :text="computedText" :max-lines="maxLines">
+        <template #after="{ clamped, expanded, toggle }">
+            <span v-if="clamped && !expanded" @click="(event) => {
                 event.stopPropagation();
-            }" />
-    </div>
+                toggle();
+            }" class="text-ellipsis">
+                [{{ t('tips.expand') }}]
+            </span>
+            <span v-else-if="expanded && !clamped" @click="(event) => {
+                event.stopPropagation();
+                toggle();
+            }" class="text-ellipsis">
+                [{{ t('tips.collapse') }}]
+            </span>
+        </template>
+    </LineClamp>
 </template>
 
 <script setup lang='ts'>
-import { TextEllipsis } from 'vant';
-import 'vant/es/text-ellipsis/style';
+import { computed, ref, useSlots } from 'vue';
+import { LineClamp } from "vue-clamp";
 import { useI18n } from 'vue-i18n';
-import { computed, useSlots, ref, onMounted, onUnmounted } from 'vue';
 
-const { t } = useI18n();
 const slots = useSlots();
-const containerRef = ref<HTMLElement | null>(null);
-const renderKey = ref(0);
-
+const expanded = ref(false);
+const { t } = useI18n();
 const props = defineProps({
-    expandText: {
-        type: String,
-    },
-    collapseText: {
-        type: String,
-    },
-    content: {
+    text: {
         type: String,
         default: ''
     },
-    rows: {
-        type: [Number, String],
-        default: '2'
+    maxLines: {
+        type: Number,
+        default: 2
     }
 });
 
-const computedContent = computed(() => {
+const computedText = computed(() => {
     if (slots.default) {
         const slotContent = slots.default();
         if (slotContent.length > 0) {
@@ -48,37 +48,13 @@ const computedContent = computed(() => {
             }).join('');
         }
     }
-    return props.content;
-});
-
-let observer: IntersectionObserver | null = null;
-
-onMounted(() => {
-    observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                renderKey.value++;
-                observer?.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.01
-    });
-
-    if (containerRef.value) {
-        observer.observe(containerRef.value);
-    }
-});
-
-onUnmounted(() => {
-    if (observer) {
-        observer.disconnect();
-    }
+    return props.text;
 });
 </script>
 
 <style scoped>
-.van-text-ellipsis {
-    --van-text-ellipsis-action-color: var(--theme-color);
+.text-ellipsis {
+    font-weight: normal;
+    color: var(--theme-color);
 }
 </style>
