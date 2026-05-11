@@ -30,7 +30,7 @@ import { useEnv } from '@/stores/env';
 import { useGlobal } from '@/stores/global';
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Sun, Moon, Languages } from 'lucide-vue-next';
+import { Sun, Moon, Languages } from '@lucide/vue';
 import Scrollable from '@/components/Scrollable.vue';
 import { Switcher, MusicPlayer } from '@/components/Menu';
 

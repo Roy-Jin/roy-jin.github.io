@@ -33,7 +33,7 @@ import { ref, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Popup } from 'vant';
 import 'vant/es/popup/style';
-import { Search, X } from 'lucide-vue-next';
+import { Search, X } from '@lucide/vue';
 import { Motion, AnimatePresence } from 'motion-v';
 import Scrollable from '@/components/Scrollable.vue';
 import { Repo } from '@/components/Projects';

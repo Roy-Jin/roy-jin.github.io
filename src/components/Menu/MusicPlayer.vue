@@ -66,7 +66,7 @@ import {
     Volume2,
     Shuffle,
     Volume
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 
 const env = useEnv();
 const global = useGlobal();

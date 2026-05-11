@@ -2,6 +2,7 @@
     <div class="projects">
         <Repo v-if="filteredRepos[0]" :repo="filteredRepos[0]" />
         <button class="show-more-btn cursor-target" @click="repoAllRef?.showPopup">
+            <FolderGit2 />
             {{ t('projects.showMore') }}
         </button>
     </div>
@@ -14,6 +15,7 @@ import { useGlobal } from '@/stores/global';
 import { filterRepos } from '@/utils';
 import { Repo, RepoAll } from '@/components/Projects';
 import { useI18n } from 'vue-i18n';
+import { FolderGit2 } from '@lucide/vue';
 
 const { t } = useI18n();
 const global = useGlobal();
@@ -38,6 +40,10 @@ const filteredRepos = computed(() => {
     width: 100%;
     padding: 0.75rem 1rem;
     margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     border: 2px solid var(--theme-color);
     border-radius: var(--border-radius);
     background-color: var(--theme-color-light);

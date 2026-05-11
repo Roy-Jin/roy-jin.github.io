@@ -112,7 +112,7 @@ export const useEnv = defineStore("env", {
             id: "7697114803",
             upd_freq: (1000 * 60) * 10, // 10 minutes
         },
-        copyright: "Copyright © 2024 - 2026 Roy-Jin",
+        copyright: `Copyright © 2024 - ${new Date().getFullYear()} Roy-Jin`,
     }),
 
     getters: {},

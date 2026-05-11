@@ -3,7 +3,10 @@
         :style="{ background: `color-mix(in srgb, ${repo.color ?? ''} 20%, transparent)` }">
         <div class="project-content">
             <div class="project-header">
-                <div class="project-name">{{ repo.name }}</div>
+                <span class="project-name" :style="{ display: 'flex', alignItems: 'center', gap: '0.5rem' }">
+                    <BookMarked :style="{ color: 'var(--theme-color)' }" />
+                    {{ repo.name }}
+                </span>
             </div>
             <div v-if="repo.description" class="project-description">
                 <TextEllipsis> {{ repo.description }}</TextEllipsis>
@@ -11,7 +14,7 @@
             <div class="project-footer">
                 <div class="project-stats">
                     <span v-if="repo.language" class="stat-item">
-                        <Circle :size="14" />
+                        <Code :size="14" />
                         {{ repo.language }}
                     </span>
                     <span v-if="repo.stargazers_count !== undefined" class="stat-item">
@@ -39,7 +42,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Star, Circle, GitFork, Eye, Clock } from 'lucide-vue-next';
+import { Star, Code, GitFork, Eye, Clock, BookMarked } from '@lucide/vue';
 import { showConfirmDialog } from 'vant';
 import TextEllipsis from '@/components/TextEllipsis.vue';
 
