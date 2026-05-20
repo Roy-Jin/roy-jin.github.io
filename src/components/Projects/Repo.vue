@@ -11,6 +11,10 @@
             <div v-if="displayDescription" class="project-description">
                 <TextEllipsis> {{ displayDescription }}</TextEllipsis>
             </div>
+            <div v-if="repo.homepage" class="project-homepage" @click.stop="handleHomepageClick">
+                <LinkIcon :size="14" />
+                <span class="homepage-text">{{ repo.homepage }}</span>
+            </div>
             <div class="project-footer">
                 <div class="project-stats">
                     <span v-if="repo.language" class="stat-item">
@@ -42,7 +46,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Star, Code, GitFork, Eye, Clock, BookMarked } from '@lucide/vue';
+import { Star, Code, GitFork, Eye, Clock, BookMarked, LinkIcon } from '@lucide/vue';
 import { showConfirmDialog } from 'vant';
 import TextEllipsis from '@/components/TextEllipsis.vue';
 import type { RepoProps } from '@/components/Projects';
@@ -77,6 +81,20 @@ const handleClick = () => {
             closeOnClickOverlay: true
         }).then(() => {
             window.open(props.repo.html_url, '_blank');
+        }).catch(() => { });
+    }
+};
+
+const handleHomepageClick = () => {
+    if (props.repo.homepage) {
+        showConfirmDialog({
+            title: t('tips.openLink.title'),
+            message: `${t('tips.openLink.message')}\n\n${props.repo.homepage}`,
+            cancelButtonColor: 'color-mix(in srgb, grey 60%, transparent)',
+            confirmButtonColor: 'var(--theme-color)',
+            closeOnClickOverlay: true
+        }).then(() => {
+            window.open(props.repo.homepage as string, '_blank');
         }).catch(() => { });
     }
 };
@@ -199,6 +217,25 @@ const handleClick = () => {
     gap: 0.35rem;
     font-size: 0.8rem;
     opacity: 0.65;
+}
+
+.project-homepage {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--theme-color);
+    overflow: hidden;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.homepage-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 @keyframes pulse {
