@@ -34,6 +34,9 @@
     "title": "控制栏"
   },
   "date": {
+    "justNow": "刚刚",
+    "minutesAgo": "{minutes} 分钟前",
+    "hoursAgo": "{hours} 小时前",
     "today": "今天",
     "yesterday": "昨天",
     "daysAgo": "{days} 天前",

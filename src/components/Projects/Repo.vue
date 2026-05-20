@@ -32,7 +32,7 @@
                 </div>
                 <div v-if="repo.pushed_at" class="project-updated">
                     <Clock :size="14" />
-                    <span>{{ formatDate(repo.pushed_at) }}</span>
+                    <span>{{ formatDate(repo.pushed_at, t) }}</span>
                 </div>
             </div>
         </div>
@@ -46,6 +46,7 @@ import { Star, Code, GitFork, Eye, Clock, BookMarked } from '@lucide/vue';
 import { showConfirmDialog } from 'vant';
 import TextEllipsis from '@/components/TextEllipsis.vue';
 import type { RepoProps } from '@/components/Projects';
+import { formatDate } from '@/utils';
 
 const { t, locale } = useI18n();
 
@@ -77,31 +78,6 @@ const handleClick = () => {
         }).then(() => {
             window.open(props.repo.html_url, '_blank');
         }).catch(() => { });
-    }
-};
-
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) {
-        return t('date.today');
-    } else if (diffDays === 1) {
-        return t('date.yesterday');
-    } else if (diffDays < 30) {
-        return t('date.daysAgo', {
-            days: diffDays
-        });
-    } else if (diffDays < 365) {
-        return t('date.monthsAgo', {
-            months: Math.floor(diffDays / 30)
-        });
-    } else {
-        return t('date.yearsAgo', {
-            years: Math.floor(diffDays / 365)
-        });
     }
 };
 </script>

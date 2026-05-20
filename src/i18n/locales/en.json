@@ -34,6 +34,9 @@
     "title": "Menus"
   },
   "date": {
+    "justNow": "Just now",
+    "minutesAgo": "{minutes} minutes ago",
+    "hoursAgo": "{hours} hours ago",
     "today": "Today",
     "yesterday": "Yesterday",
     "daysAgo": "{days} days ago",
